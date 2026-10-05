@@ -1,0 +1,1738 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Исследование: кластеризация МО</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+	<style>
+		:root {
+			--bg: #fff;
+			--bg-soft: #f6f7f4;
+			--bg-dark-green: #0f2419;
+			--bg-dark-green-soft: #14301f;
+			--text: #1a1a1a;
+			--text-soft: #4a4a4a;
+			--text-muted: #7a7a7a;
+			--text-on-dark: #e8f0e5;
+			--text-on-dark-muted: #9db3a3;
+			--green: #a3e635;
+			--green-deep: #2f5d3a;
+			--border: rgba(15,36,25,.10);
+			--border-strong: rgba(15,36,25,.22);
+			--radius: 16px;
+			--radius-sm: 11px
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box
+		}
+
+		html {
+			scroll-behavior: smooth
+		}
+
+		body {
+			font-family: 'Inter',sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			line-height: 1.4;
+			overflow-x: hidden;
+			-webkit-font-smoothing: antialiased
+		}
+
+		.side-nav {
+			position: fixed;
+			right: 18px;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			z-index: 100
+		}
+
+			.side-nav .dot {
+				display: block;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: rgba(15,36,25,.15);
+				transition: .3s;
+				position: relative
+			}
+
+				.side-nav .dot:hover,
+				.side-nav .dot.active {
+					background: var(--green-deep);
+					transform: scale(1.35)
+				}
+
+				.side-nav .dot::after {
+					content: attr(data-label);
+					position: absolute;
+					right: 17px;
+					top: 50%;
+					transform: translateY(-50%);
+					font-size: 10px;
+					color: var(--text-muted);
+					white-space: nowrap;
+					opacity: 0;
+					transition: .2s;
+					pointer-events: none;
+					background: #fff;
+					padding: 3px 7px;
+					border-radius: 5px;
+					border: 1px solid var(--border)
+				}
+
+				.side-nav .dot:hover::after {
+					opacity: 1
+				}
+
+		.section {
+			padding: 58px 0;
+			position: relative;
+			background: var(--bg)
+		}
+
+		.section-soft {
+			background: var(--bg-soft)
+		}
+
+		.section-dark {
+			background: var(--bg-dark-green);
+			color: var(--text-on-dark)
+		}
+
+			.section-dark .section-title {
+				color: #fff
+			}
+
+			.section-dark .lead {
+				color: var(--text-on-dark-muted)
+			}
+
+			.section-dark .sub-title {
+				color: #fff
+			}
+
+		.section-accent {
+			background: linear-gradient(180deg,#fff 0%,#eef3e8 100%)
+		}
+
+		.container {
+			width: 100%;
+			max-width: 1180px;
+			margin: auto;
+			padding: 0 24px
+		}
+
+		.section-title {
+			font-size: clamp(28px,3.5vw,42px);
+			font-weight: 900;
+			letter-spacing: -.03em;
+			margin-bottom: 28px;
+			line-height: 1.05
+		}
+
+		.section-hero {
+			padding-top: 28px;
+			padding-bottom: 55px
+		}
+
+		.hero-image {
+			width: 100%;
+			aspect-ratio: 21/7;
+			background: var(--bg-soft);
+			border-radius: var(--radius);
+			overflow: hidden;
+			margin-bottom: 22px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			border: 1px solid var(--border)
+		}
+
+			.hero-image img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover
+			}
+
+		.img-placeholder {
+			color: var(--text-muted);
+			font-size: 10px;
+			letter-spacing: .1em;
+			text-transform: uppercase
+		}
+
+		.hero-title {
+			font-size: clamp(34px,5.2vw,60px);
+			font-weight: 900;
+			letter-spacing: -.04em;
+			line-height: 1;
+			margin-bottom: 11px
+		}
+
+		.hero-subtitle {
+			font-size: 16px;
+			color: var(--text-soft);
+			max-width: 720px;
+			margin-bottom: 25px
+		}
+
+		.info-cards {
+			display: grid;
+			grid-template-columns: repeat(3,1fr);
+			gap: 10px
+		}
+
+		.info-card {
+			background: #fff;
+			border-radius: var(--radius);
+			padding: 16px 20px;
+			border: 1px solid var(--border);
+			transition: .3s
+		}
+
+			.info-card:hover {
+				border-color: var(--border-strong);
+				transform: translateY(-2px)
+			}
+
+		.info-label {
+			font-size: 11px;
+			color: var(--text-muted);
+			margin-bottom: 4px
+		}
+
+		.info-value {
+			font-size: 20px;
+			font-weight: 700
+		}
+
+		.two-col {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+			align-items: start
+		}
+
+		.lead {
+			font-size: 14px;
+			color: var(--text-soft);
+			margin-bottom: 17px;
+			line-height: 1.5
+		}
+
+		.method-list {
+			list-style: none
+		}
+
+			.method-list li {
+				padding: 9px 0;
+				border-top: 1px solid var(--border);
+				font-size: 13px;
+				color: var(--text-soft);
+				display: flex;
+				gap: 10px;
+				align-items: flex-start
+			}
+
+				.method-list li:last-child {
+					border-bottom: 1px solid var(--border)
+				}
+
+		.method-num {
+			flex: 0 0 25px;
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: var(--green);
+			color: var(--bg-dark-green);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 900;
+			font-size: 11px;
+			margin-top: 1px
+		}
+
+		.method-text {
+			flex: 1
+		}
+
+		.method-image {
+			aspect-ratio: 4/3;
+			background: var(--bg-soft);
+			border-radius: var(--radius);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid var(--border)
+		}
+
+		.section-dark .chart-wrap {
+			background: var(--bg-dark-green-soft);
+			border-radius: var(--radius);
+			padding: 18px;
+			margin-bottom: 11px;
+			height: 350px;
+			position: relative;
+			border: 1px solid rgba(163,230,53,.12)
+		}
+
+		.chart-wrap canvas {
+			max-height: 100%
+		}
+
+		.section-dark .slider-block {
+			background: var(--bg-dark-green-soft);
+			border-radius: var(--radius);
+			padding: 16px 19px;
+			border: 1px solid rgba(163,230,53,.12)
+		}
+
+		.slider-labels {
+			display: flex;
+			justify-content: space-between;
+			font-size: 10px;
+			color: var(--text-on-dark-muted);
+			margin-bottom: 9px;
+			align-items: baseline
+		}
+
+		.year-current {
+			color: var(--green);
+			font-weight: 700;
+			font-size: 18px
+		}
+
+		input[type=range] {
+			width: 100%;
+			appearance: none;
+			height: 3px;
+			background: rgba(255,255,255,.15);
+			border-radius: 2px;
+			outline: none;
+			cursor: pointer
+		}
+
+			input[type=range]::-webkit-slider-thumb {
+				appearance: none;
+				width: 17px;
+				height: 17px;
+				border-radius: 50%;
+				background: var(--green);
+				cursor: pointer;
+				border: 2px solid var(--bg-dark-green);
+				box-shadow: 0 0 0 1px var(--green)
+			}
+
+			input[type=range]::-moz-range-thumb {
+				width: 17px;
+				height: 17px;
+				border-radius: 50%;
+				background: var(--green);
+				border: 2px solid var(--bg-dark-green);
+				cursor: pointer
+			}
+
+		.slider-caption {
+			margin-top: 9px;
+			font-size: 10px;
+			color: var(--text-on-dark-muted)
+		}
+
+		/* КАРТЫ — теперь только две карты рядом, без увеличенной области */
+		.map-pair {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 18px;
+			justify-content: center;
+			align-items: stretch;
+			margin-bottom: 10px;
+		}
+		.map-pair-single {
+			grid-template-columns: 1fr;
+			max-width: 820px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.map-item {
+			width: 100%;
+			height: 500px;
+			border-radius: var(--radius);
+			overflow: hidden;
+			border: 2px solid rgba(47,93,58,.25);
+			background: var(--bg-soft);
+			position: relative;
+			box-shadow: 0 4px 16px rgba(0,0,0,.02);
+		}
+
+			.map-item iframe {
+				display: block;
+				width: 100%;
+				height: 100%;
+				border: none;
+			}
+
+		.map-year-label {
+			position: absolute;
+			top: 12px;
+			left: 14px;
+			background: rgba(15,36,25,.85);
+			color: #fff;
+			padding: 4px 10px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: .3px;
+			z-index: 5;
+			backdrop-filter: blur(2px);
+			border: 1px solid rgba(163,230,53,.3);
+		}
+
+		.cluster-year-title {
+			font-size: 20px;
+			font-weight: 700;
+			letter-spacing: -.02em;
+			margin: 27px 0 11px
+		}
+
+		.cluster-grid {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			width: 100%;
+		}
+
+		.cluster-card {
+			background: #fff;
+			color: var(--text);
+			border-radius: 12px;
+			padding: 14px 18px;
+			border: 1px solid rgba(47,93,58,.20);
+			border-left: 4px solid var(--green-deep);
+			width: 100%;
+			transition: transform .25s,background .25s,border-color .25s,box-shadow .25s
+		}
+			/* Цветные рамки кластеров */
+			.cluster-card.cluster-c0 {
+				border-left-color: #E53935;
+			}
+			/* красный */
+			.cluster-card.cluster-c1 {
+				border-left-color: #FDD835;
+			}
+			/* жёлтый */
+			.cluster-card.cluster-c2 {
+				border-left-color: #43A047;
+			}
+			/* зелёный */
+			.cluster-card.cluster-c3 {
+				border-left-color: #1E88E5;
+			}
+			/* синий */
+			.cluster-card.cluster-c4 {
+				border-left-color: #FB8C00;
+			}
+			/* оранжевый */
+			.cluster-card.cluster-c5 {
+				border-left-color: #8E44AD;
+			}
+
+		.cluster-examples {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 10px;
+			margin-top: 14px;
+			padding-top: 12px;
+			border-top: 1px solid rgba(47,93,58,.18);
+		}
+
+		.cluster-example {
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+			.cluster-example img {
+				width: 150px;
+				aspect-ratio: 4 / 3; /* одинаковая высота у всех трёх */
+				object-fit: cover;
+				border-radius: 8px;
+				border: 1px solid rgba(47,93,58,.18);
+				display: block;
+			}
+
+			.cluster-example figcaption {
+				margin-top: 6px;
+				font-size: 10px;
+				color: var(--text-muted);
+				text-align: center;
+				line-height: 1.25;
+			}
+		.cluster-num {
+			font-size: 10px;
+			font-weight: 700;
+			color: var(--green-deep);
+			margin-bottom: 10px;
+			letter-spacing: .12em
+		}
+
+		.cluster-card h3 {
+			font-size: 15px;
+			font-weight: 700;
+			margin-bottom: 7px;
+			letter-spacing: -.02em;
+			line-height: 1.28
+		}
+
+		.cluster-card p {
+			font-size: 12px;
+			color: var(--text-soft);
+			line-height: 1.48;
+			margin-bottom: 10px
+		}
+
+		.cluster-representatives {
+			padding-top: 9px;
+			border-top: 1px solid rgba(47,93,58,.18);
+			font-size: 11px;
+			color: var(--text-soft);
+			line-height: 1.45
+		}
+
+			.cluster-representatives strong {
+				color: var(--green-deep)
+			}
+
+		.cluster-table-placeholder {
+			margin-top: 22px;
+			padding: 22px;
+			min-height: 125px;
+			border: 1px dashed var(--border-strong);
+			border-radius: var(--radius);
+			background: var(--bg-soft);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center
+		}
+
+		.placeholder-title {
+			font-size: 15px;
+			font-weight: 700;
+			margin-bottom: 5px
+		}
+
+		.placeholder-text {
+			font-size: 12px;
+			color: var(--text-muted)
+		}
+
+		.cluster-table-section {
+			margin-top: 22px;
+		}
+
+		.cluster-table-section {
+			margin-top: 18px;
+		}
+
+		.cluster-profile-comparison {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			gap: 14px;
+			align-items: start;
+		}
+
+		.cluster-profile-year {
+			min-width: 0;
+		}
+
+		.cluster-table-title {
+			font-size: 15px;
+			font-weight: 700;
+			margin: 8px 0 5px;
+			color: var(--text);
+		}
+
+		.cluster-table-subtitle {
+			font-size: 10px;
+			color: var(--text-muted);
+			margin-bottom: 7px;
+		}
+
+		.cluster-table-wrap {
+			width: 100%;
+			overflow: hidden;
+			border: 1px solid rgba(47,93,58,.18);
+			border-radius: 10px;
+			background: #fff;
+			box-shadow: 0 4px 12px rgba(47,93,58,.05);
+		}
+
+		.cluster-profile-table {
+			width: 100%;
+			min-width: 0;
+			border-collapse: collapse;
+			table-layout: fixed;
+			font-size: 13px;
+		}
+
+			.cluster-profile-table th:first-child {
+				width: 27%;
+			}
+
+			.cluster-profile-table th,
+			.cluster-profile-table td {
+				padding: 10px 8px;
+				border-bottom: 1px solid rgba(47,93,58,.10);
+				white-space: nowrap;
+			}
+
+			.cluster-profile-table thead th {
+				background: #dff5b5;
+				color: #18331f;
+				font-weight: 800;
+				text-align: center;
+				line-height: 1.15;
+			}
+
+			.cluster-profile-table tbody th {
+				background: #f2f9e8;
+				color: #24372a;
+				font-weight: 700;
+				text-align: left;
+				position: sticky;
+				left: 0;
+				z-index: 1;
+				white-space: normal;
+				line-height: 1.2;
+			}
+
+			.cluster-profile-table tbody td {
+				text-align: center;
+				color: var(--text-soft);
+			}
+
+			.cluster-profile-table tbody tr:nth-child(even) td {
+				background: #f8fbf4;
+			}
+
+			.cluster-profile-table tbody tr:hover td,
+			.cluster-profile-table tbody tr:hover th {
+				background: #eaf8cf;
+			}
+
+		.cluster-profile-note {
+			margin-top: 8px;
+			margin-bottom: 32px;
+			font-size: 11px;
+			color: var(--text-muted);
+		}
+
+		/* Выбор метода и оценка качества кластеризации */
+		.quality-section {
+			background: #f3f6f2;
+		}
+
+		.quality-lead {
+			max-width: 900px;
+			font-size: 14px;
+			line-height: 1.6;
+			color: var(--text-soft);
+			margin-bottom: 18px;
+		}
+
+		.quality-lists {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+			margin: 0 0 24px;
+		}
+
+		.quality-list-block {
+			background: #fbfcf9;
+			border: 1px solid rgba(33, 74, 47, .12);
+			border-radius: var(--radius);
+			padding: 14px 16px;
+			box-shadow: 0 4px 14px rgba(33, 74, 47, .04);
+		}
+
+			.quality-list-block h3 {
+				font-size: 16px;
+				margin: 0 0 7px;
+				color: #18331f;
+			}
+
+		.quality-list {
+			margin: 0;
+			padding-left: 20px;
+			color: var(--text-soft);
+			font-size: 13px;
+			line-height: 1.7;
+		}
+
+			.quality-list li::marker {
+				color: #2f5d3a;
+			}
+
+		.quality-main-grid {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 300px;
+			gap: 18px;
+			align-items: start;
+		}
+
+		.quality-table-title {
+			font-size: 16px;
+			font-weight: 700;
+			margin: 0 0 6px;
+			color: var(--text);
+		}
+
+		.quality-table-subtitle {
+			font-size: 11px;
+			color: var(--text-muted);
+			margin-bottom: 8px;
+		}
+
+		.quality-table-wrap {
+			width: 100%;
+			overflow-x: auto;
+			border: 1px solid rgba(33, 74, 47, .25);
+			border-radius: var(--radius);
+			background: #fff;
+			box-shadow: 0 6px 20px rgba(33, 74, 47, .06);
+		}
+
+		.quality-table {
+			width: 100%;
+			min-width: 0;
+			table-layout: fixed;
+			border-collapse: collapse;
+			font-size: 10.5px;
+		}
+
+			.quality-table th,
+			.quality-table td {
+				padding: 7px 6px;
+				border-bottom: 1px solid rgba(33, 74, 47, .12);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+				.quality-table th:nth-child(1) {
+					width: 19%;
+				}
+
+				.quality-table th:nth-child(2) {
+					width: 10%;
+				}
+
+				.quality-table th:nth-child(3) {
+					width: 9%;
+				}
+
+				.quality-table th:nth-child(n+4) {
+					width: 12.4%;
+				}
+
+			.quality-table thead th {
+				background: #214a2f;
+				color: #fff;
+				font-weight: 800;
+				text-align: center;
+			}
+
+			.quality-table tbody th {
+				background: #e7efe7;
+				color: #18331f;
+				font-weight: 700;
+				text-align: left;
+				position: sticky;
+				left: 0;
+				z-index: 1;
+			}
+
+			.quality-table tbody td {
+				text-align: center;
+				color: var(--text-soft);
+			}
+
+			.quality-table tbody tr:nth-child(even) td {
+				background: #f5f8f4;
+			}
+
+			.quality-table tbody tr:hover td,
+			.quality-table tbody tr:hover th {
+				background: #e8f1e7;
+			}
+
+		.rank-cell-top1 {
+			background: #d8efd4 !important;
+			color: #18331f !important;
+			font-weight: 800;
+		}
+
+		.rank-cell-top2 {
+			background: #e8f4e1 !important;
+			color: #274b31 !important;
+			font-weight: 700;
+		}
+
+		.rank-cell-top3 {
+			background: #f1f7eb !important;
+			color: #36553d !important;
+			font-weight: 700;
+		}
+
+		.metric-legend {
+			display: flex;
+			gap: 13px;
+			flex-wrap: wrap;
+			margin-top: 8px;
+			font-size: 10px;
+			color: var(--text-muted);
+		}
+
+			.metric-legend span {
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+			}
+
+		.legend-box {
+			width: 12px;
+			height: 12px;
+			border-radius: 3px;
+			border: 1px solid rgba(33, 74, 47, .12);
+		}
+
+		.legend-top1 {
+			background: #d8efd4;
+		}
+
+		.legend-top2 {
+			background: #e8f4e1;
+		}
+
+		.legend-top3 {
+			background: #f1f7eb;
+		}
+
+		.formula-card {
+			margin-top: 46px;
+			background: linear-gradient(135deg, #183b25 0%, #214a2f 100%);
+			color: #eef8ea;
+			border-radius: var(--radius);
+			padding: 18px;
+			box-shadow: 0 10px 28px rgba(24, 59, 37, .10);
+			min-width: 0;
+		}
+
+		.formula-label {
+			font-size: 10px;
+			text-transform: uppercase;
+			letter-spacing: .12em;
+			color: #b6d9bc;
+			margin-bottom: 9px;
+		}
+
+		.formula {
+			font-size: 24px;
+			font-weight: 900;
+			letter-spacing: -.03em;
+			line-height: 1.15;
+			color: #fff;
+			margin-bottom: 10px;
+		}
+
+			.formula .formula-green {
+				color: #a3e635;
+			}
+
+		.formula-note {
+			font-size: 11px;
+			line-height: 1.5;
+			color: #c5d8c9;
+		}
+
+		.weight-list {
+			margin-top: 14px;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 7px 14px;
+		}
+
+		.weight-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			border-bottom: 1px solid rgba(255,255,255,.08);
+			padding-bottom: 5px;
+		}
+
+			.weight-item .weight-name {
+				font-size: 11px;
+				color: #b6d9bc;
+			}
+
+			.weight-item .weight-value {
+				font-size: 16px;
+				font-weight: 900;
+				color: #a3e635;
+			}
+
+		.quality-left-column,
+		.quality-right-column {
+			min-width: 0;
+		}
+
+		.final-ranking {
+			min-width: 0;
+			margin-top: 16px;
+		}
+
+			.final-ranking .quality-table-wrap {
+				width: 300px;
+				max-width: 100%;
+			}
+
+			.final-ranking .quality-table {
+				width: auto;
+				min-width: 0;
+				table-layout: auto;
+			}
+
+				.final-ranking .quality-table th:first-child,
+				.final-ranking .quality-table td:first-child {
+					width: 1%;
+					min-width: 28px;
+					padding-left: 10px;
+					padding-right: 10px;
+					white-space: nowrap;
+					text-align: center;
+				}
+
+				.final-ranking .quality-table th:nth-child(2) {
+					width: 1%;
+					white-space: nowrap;
+				}
+
+			.final-ranking .quality-top1 th,
+			.final-ranking .quality-top1 td {
+				background: #d8efd4 !important;
+				color: #18331f !important;
+				font-weight: 800;
+			}
+
+			.final-ranking .quality-top2 th,
+			.final-ranking .quality-top2 td {
+				background: #e8f4e1 !important;
+				color: #274b31 !important;
+				font-weight: 700;
+			}
+
+			.final-ranking .quality-top3 th,
+			.final-ranking .quality-top3 td {
+				background: #f1f7eb !important;
+				color: #36553d !important;
+				font-weight: 700;
+			}
+
+		.final-explanation {
+			margin-top: 16px;
+			padding: 18px 20px;
+			background: #fff;
+			border: 1px solid rgba(33,74,47,.18);
+			border-radius: var(--radius);
+			min-height: 110px;
+		}
+
+			.final-explanation h3 {
+				font-size: 17px;
+				margin-bottom: 7px;
+				color: #18331f;
+			}
+
+			.final-explanation p {
+				font-size: 13px;
+				line-height: 1.6;
+				color: var(--text-soft);
+			}
+
+		@media (max-width: 900px) {
+			.quality-main-grid,
+			.quality-lists {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.interpret-grid {
+			display: grid;
+			grid-template-columns: repeat(3,1fr);
+			gap: 12px;
+			margin-bottom: 25px
+		}
+
+		.interpret-card {
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 19px;
+			background: #fff
+		}
+
+		.metric-value {
+			font-size: 32px;
+			font-weight: 900;
+			color: var(--green-deep);
+			letter-spacing: -.03em;
+			margin-bottom: 5px;
+			line-height: 1
+		}
+
+		.metric-label {
+			font-size: 11px;
+			color: var(--text-muted)
+		}
+
+		.interpret-text {
+			font-size: 14px;
+			line-height: 1.55;
+			color: var(--text-soft);
+			max-width: 900px
+		}
+
+		.conclusions-list {
+			display: flex;
+			flex-direction: column;
+			gap: 8px
+		}
+
+		.conclusion-item {
+			display: flex;
+			gap: 15px;
+			align-items: flex-start;
+			padding: 16px 19px;
+			background: #fff;
+			border-radius: var(--radius);
+			border: 1px solid var(--border);
+			border-left: 3px solid var(--green-deep)
+		}
+
+		.conclusion-num {
+			font-size: 18px;
+			font-weight: 900;
+			color: var(--green-deep);
+			line-height: 1;
+			flex-shrink: 0
+		}
+
+		.conclusion-item p {
+			font-size: 13px;
+			line-height: 1.48;
+			color: var(--text-soft)
+		}
+
+		.limits-list {
+			list-style: none;
+			display: grid;
+			grid-template-columns: repeat(3,1fr);
+			gap: 10px
+		}
+
+			.limits-list li {
+				padding: 17px 19px;
+				background: var(--bg-soft);
+				border-radius: var(--radius-sm);
+				font-size: 13px;
+				color: var(--text-soft);
+				border: 1px solid var(--border)
+			}
+
+		.sub-title {
+			font-size: 15px;
+			font-weight: 700;
+			margin-bottom: 11px
+		}
+
+		.sources-list, .contacts-list {
+			list-style: none
+		}
+
+			.sources-list li, .contacts-list li {
+				padding: 8px 0;
+				border-bottom: 1px solid var(--border);
+				font-size: 13px;
+				color: var(--text-soft)
+			}
+
+		.section-dark .sources-list li,
+		.section-dark .contacts-list li {
+			border-bottom-color: rgba(255,255,255,.1);
+			color: var(--text-on-dark)
+		}
+
+		.footer-note {
+			margin-top: 38px;
+			padding-top: 18px;
+			border-top: 1px solid rgba(255,255,255,.1);
+			font-size: 11px;
+			color: var(--text-on-dark-muted)
+		}
+
+		.section .container {
+			opacity: 0;
+			transform: translateY(15px);
+			transition: opacity .7s ease,transform .7s ease
+		}
+
+		.section.visible .container {
+			opacity: 1;
+			transform: translateY(0)
+		}
+
+		@media(max-width:900px) {
+			.cluster-profile-comparison {
+				grid-template-columns: 1fr;
+			}
+
+			.limits-list {
+				grid-template-columns: repeat(2,1fr)
+			}
+
+			.map-pair {
+				grid-template-columns: 1fr;
+				gap: 16px;
+			}
+
+			.map-item {
+				height: 360px;
+			}
+		}
+
+		@media(max-width:700px) {
+			.section {
+				padding: 45px 0
+			}
+
+			.container {
+				padding: 0 16px
+			}
+
+			.side-nav {
+				display: none
+			}
+
+			.section-title {
+				margin-bottom: 23px
+			}
+
+			.info-cards, .interpret-grid, .limits-list {
+				grid-template-columns: 1fr
+			}
+
+			.two-col {
+				grid-template-columns: 1fr;
+				gap: 20px
+			}
+
+			.info-card, .cluster-card, .interpret-card {
+				padding: 17px
+			}
+
+			.weight-grid {
+				grid-template-columns: repeat(3,1fr);
+			}
+
+			.section-dark .chart-wrap {
+				padding: 10px;
+				height: 280px
+			}
+
+			.section-dark .slider-block {
+				padding: 15px
+			}
+
+			.map-item {
+				height: 280px;
+			}
+
+			.map-pair {
+				gap: 12px;
+			}
+
+			.hero-image {
+				aspect-ratio: 16/7
+			}
+
+			.hero-title {
+				font-size: 36px
+			}
+
+			.footer-note {
+				margin-top: 28px
+			}
+		}
+
+		/* Стили для компактных таблиц */
+		.compact-table {
+			font-size: 9.5px;
+		}
+
+			.compact-table th,
+			.compact-table td {
+				padding: 4px 3px;
+			}
+
+			.compact-table tbody th {
+				font-size: 9px;
+				white-space: normal;
+				line-height: 1.2;
+			}
+
+			.compact-table thead th {
+				font-size: 9px;
+			}
+	</style>
+</head>
+<body>
+	<nav class="side-nav">
+		<a href="#hero" class="dot" data-label="Начало"></a>
+		<a href="#method" class="dot" data-label="Методология"></a>
+		<a href="#chart" class="dot" data-label="График"></a>
+		<a href="#clusters" class="dot" data-label="Кластеры"></a>
+		<a href="#quality" class="dot" data-label="Оценка качества"></a>
+		<a href="#interpret" class="dot" data-label="Интерпретация"></a>
+		<a href="#conclusions" class="dot" data-label="Выводы"></a>
+		<a href="#limits" class="dot" data-label="Ограничения"></a>
+		<a href="#sources" class="dot" data-label="Источники"></a>
+	</nav>
+
+	<section id="hero" class="section section-hero">
+		<div class="container">
+			<div class="hero-image"><span class="img-placeholder">Изображение</span></div>
+			<h1 class="hero-title">Кластеризация российских муниципальных образований</h1>
+			<p class="hero-subtitle">Анализ данных, машинное обучение и экономика</p>
+			<div class="info-cards">
+				<div class="info-card"><div class="info-label">Метод</div><div class="info-value">—</div></div>
+				<div class="info-card"><div class="info-label">Данные</div><div class="info-value">—</div></div>
+				<div class="info-card"><div class="info-label">Период</div><div class="info-value">—</div></div>
+			</div>
+		</div>
+	</section>
+
+	<section id="method" class="section section-soft">
+		<div class="container">
+			<h2 class="section-title">Данные</h2>
+			<div class="two-col">
+				<div>
+					<p class="lead">В исследовании использованы данные с сайта Сбер.Индекса и Росстата по 1094 муниципальным образованиям.</p>
+					<ul class="method-list">
+						<li><span class="method-num">1</span><span class="method-text"><b>Сбер.Индекс</b> — потребительские безналичные расходы на уровне муниципальных образований по категориям трат.</span></li>
+						<li><span class="method-num">2</span><span class="method-text"><b>Росстат</b> — данные о заработной плате.</span></li>
+						<li><span class="method-num">3</span><span class="method-text"><b>Росстат</b> — данные о численности населения.</span></li>
+						<li><span class="method-num">4</span><span class="method-text"><b>Росстат</b> — данные об отраслевой структуре.</span></li>
+					</ul>
+				</div>
+				<div class="method-image"><span class="img-placeholder">Изображение</span></div>
+			</div>
+		</div>
+	</section>
+
+	<section id="chart" class="section section-dark">
+		<div class="container">
+			<h2 class="section-title">Динамика</h2>
+			<div class="chart-wrap"><canvas id="mainChart"></canvas></div>
+			<div class="slider-block">
+				<div class="slider-labels">
+					<span id="yearStart">—</span>
+					<span id="yearCurrent" class="year-current">—</span>
+					<span id="yearEnd">—</span>
+				</div>
+				<input type="range" id="timeSlider" min="0" max="10" value="10" step="1">
+				<div class="slider-caption">Ползунок управляет отображением временного ряда</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Секция Кластеры: только две карты рядом (2023 и 2024), без увеличенной области -->
+	<section id="clusters" class="section">
+		<div class="container">
+			<h2 class="section-title">Кластеры</h2>
+
+
+
+			<div class="cluster-table-section">
+				<div class="cluster-profile-comparison">
+					<!-- Профили кластеров 2023 (обновлённая таблица) -->
+					<div class="cluster-profile-year">
+						<h3 class="cluster-table-title">Профили кластеров — 2023 год</h3>
+						<div class="cluster-table-wrap">
+							<table class="cluster-profile-table compact-table">
+								<thead>
+									<tr><th>Показатель</th><th>Кластер 0</th><th>Кластер 1</th><th>Кластер 2</th><th>Кластер 3</th><th>Кластер 4</th></tr>
+								</thead>
+								<tbody>
+									<tr><th>Здоровье_share</th><td>0.053</td><td>0.048</td><td>0.052</td><td>0.049</td><td>0.042</td></tr>
+									<tr><th>Маркетплейсы_share</th><td>0.111</td><td>0.130</td><td>0.130</td><td>0.121</td><td>0.089</td></tr>
+									<tr><th>Общественное питание_share</th><td>0.049</td><td>0.017</td><td>0.018</td><td>0.033</td><td>0.033</td></tr>
+									<tr><th>Продовольствие_share</th><td>0.392</td><td>0.497</td><td>0.486</td><td>0.449</td><td>0.451</td></tr>
+									<tr><th>Транспорт_share</th><td>0.073</td><td>0.053</td><td>0.057</td><td>0.054</td><td>0.051</td></tr>
+									<tr><th>share_industry</th><td>0.211</td><td>0.082</td><td>0.105</td><td>0.411</td><td>0.171</td></tr>
+									<tr><th>share_agriculture</th><td>0.028</td><td>0.025</td><td>0.200</td><td>0.021</td><td>0.023</td></tr>
+									<tr><th>share_services</th><td>0.730</td><td>0.748</td><td>0.603</td><td>0.524</td><td>0.724</td></tr>
+									<tr><th>urban_share</th><td>0.636</td><td>0.483</td><td>0.302</td><td>0.779</td><td>0.735</td></tr>
+									<tr><th>Средняя зарплата</th><td>62651.050</td><td>44024.508</td><td>45053.756</td><td>59715.565</td><td>86407.082</td></tr>
+									<tr><th>population</th><td>209129.619</td><td>18667.239</td><td>22188.212</td><td>54186.671</td><td>29127.029</td></tr>
+									<tr><th>size</th><td>147.000</td><td>314.000</td><td>222.000</td><td>210.000</td><td>136.000</td></tr>
+									<tr><th>share_of_total</th><td>14.300</td><td>30.500</td><td>21.600</td><td>20.400</td><td>13.200</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<!-- Профили кластеров 2024 (обновлённая таблица) -->
+					<div class="cluster-profile-year">
+						<h3 class="cluster-table-title">Профили кластеров — 2024 год</h3>
+						<div class="cluster-table-wrap">
+							<table class="cluster-profile-table compact-table">
+								<thead>
+									<tr><th>Показатель</th><th>Кластер 0</th><th>Кластер 1</th><th>Кластер 2</th><th>Кластер 3</th><th>Кластер 4</th></tr>
+								</thead>
+								<tbody>
+									<tr><th>Здоровье_share</th><td>0.050</td><td>0.046</td><td>0.049</td><td>0.047</td><td>0.039</td></tr>
+									<tr><th>Маркетплейсы_share</th><td>0.153</td><td>0.177</td><td>0.176</td><td>0.166</td><td>0.124</td></tr>
+									<tr><th>Общественное питание_share</th><td>0.049</td><td>0.016</td><td>0.018</td><td>0.030</td><td>0.033</td></tr>
+									<tr><th>Продовольствие_share</th><td>0.382</td><td>0.477</td><td>0.467</td><td>0.437</td><td>0.440</td></tr>
+									<tr><th>Транспорт_share</th><td>0.069</td><td>0.048</td><td>0.052</td><td>0.048</td><td>0.048</td></tr>
+									<tr><th>share_industry</th><td>0.234</td><td>0.079</td><td>0.105</td><td>0.397</td><td>0.168</td></tr>
+									<tr><th>share_agriculture</th><td>0.023</td><td>0.024</td><td>0.197</td><td>0.022</td><td>0.026</td></tr>
+									<tr><th>share_services</th><td>0.707</td><td>0.761</td><td>0.607</td><td>0.501</td><td>0.718</td></tr>
+									<tr><th>urban_share</th><td>0.672</td><td>0.495</td><td>0.294</td><td>0.744</td><td>0.709</td></tr>
+									<tr><th>Средняя зарплата</th><td>72995.526</td><td>51629.587</td><td>53076.422</td><td>70984.624</td><td>107748.896</td></tr>
+									<tr><th>population</th><td>166779.126</td><td>18028.128</td><td>23058.894</td><td>42867.869</td><td>24941.450</td></tr>
+									<tr><th>size</th><td>215.000</td><td>298.000</td><td>226.000</td><td>176.000</td><td>111.000</td></tr>
+									<tr><th>share_of_total</th><td>21.000</td><td>29.000</td><td>22.000</td><td>17.200</td><td>10.800</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+				<div class="cluster-profile-note">В таблице приведены средние показатели по кластерам. Показатели долей приведены как доли единицы; зарплата — в рублях, население — в человек.</div>
+
+				<!-- Две карты рядом: 2023 и 2024 -->
+				<div class="map-pair map-pair-single">
+					<div class="map-item">
+						<iframe src="map_clusters_2024.html" loading="lazy" title="Карта кластеров муниципальных образований за 2024 год"></iframe>
+					</div>
+				</div>
+				<!-- Описания кластеров -->
+				<div class="cluster-grid">
+					<div class="cluster-card cluster-c0">
+						<div class="cluster-num">Кластер 0</div>
+						<h3>Крупные сервисно-промышленные МО</h3>
+						<p>Крупные по численности населения и урбанизированные территории с высокой долей услуг и заметной промышленной составляющей. Это достаточно развитые индустриальные регионы. </p>
+						<div class="cluster-representatives"><strong>Характерные представители:</strong> большую часть из них составляют МО в области крупных городов: Московская, Ленинградская, Казанская, Красноярская, Иркутская и другие области. </div>
+						<div class="cluster-examples">
+							<figure class="cluster-example">
+								<img src="мособл.png" alt="Московская область">
+								<figcaption>Московская область</figcaption>
+							</figure>
+							<figure class="cluster-example">
+								<img src="ленобл.png" alt="Ленинградская область">
+								<figcaption>Ленинградская область</figcaption>
+							</figure>
+							<figure class="cluster-example">
+								<img src="казобл.png" alt="Казанская область">
+								<figcaption>Казанская область</figcaption>
+							</figure>
+						</div>
+					</div>
+					
+
+					<div class="cluster-card cluster-c1">
+						<div class="cluster-num">Кластер 1</div>
+						<h3>Небольшие сервисные МО Высокодоходные урбанизированные МО</h3>
+						<p>Высокая урбанизация и самая высокая средняя зарплата среди кластеров. Сельскохозяйственная составляющая минимальна, заметную роль играют промышленность и услуги. Преимущественно состоит из северо-восточных регионов, где высокие зарплаты объясняются высокой стоимостью жизни и тяжёлыми условиями.</p>
+						<div class="cluster-representatives"><strong>Характерные представители:</strong> здесь будут указаны типичные МО кластера.</div>
+					</div>
+
+					<div class="cluster-card cluster-c2">
+						<div class="cluster-num">Кластер 2</div>
+						<h3>Аграрные и менее урбанизированные МО</h3>
+						<p>Повышенная роль сельского хозяйства при сравнительно низкой промышленной доле, низкая или умеренная урбанизация и относительно невысокий уровень зарплат.</p>
+						<div class="cluster-representatives"><strong>Характерные представители:</strong> здесь будут указаны типичные МО кластера.</div>
+					</div>
+
+					<div class="cluster-card cluster-c3">
+						<div class="cluster-num">Кластер 3</div>
+						<h3>Промышленные МО</h3>
+						<p>Высокая доля промышленности и высокая урбанизация. Доля услуг ниже, чем в сервисных группах, а средняя численность населения относительно велика.</p>
+						<div class="cluster-representatives"><strong>Характерные представители:</strong> здесь будут указаны типичные МО кластера.</div>
+					</div>
+
+					<div class="cluster-card cluster-c4">
+						<div class="cluster-num">Кластер 4</div>
+						<h3>Высокодоходные урбанизированные МО</h3>
+						<p>Небольшие муниципальные образования с очень высокой долей сферы услуг и низкими долями промышленности и сельского хозяйства. В структуре расходов заметно доминирует продовольствие. Это регионы, которые не специализируются на промышленности или сельском хозяйстве, локально-сервисные экономики со средним уровнем жизни.</p>
+						<div class="cluster-representatives"><strong>Характерные представители:</strong> здесь будут указаны типичные МО кластера.</div>
+					</div>
+				</div>
+</section>
+
+	<!-- Секция оценки качества без изменений -->
+	<section id="quality" class="section quality-section">
+		<div class="container">
+			<h2 class="section-title">Выбор метода и оценка качества кластеризации</h2>
+			<p class="quality-lead">Для выбора конфигурации сравниваются 4 метода построения рёбер и 3 значения параметра resolution. Лучший из них выбирается с помощью взвешенного Borda Score.</p>
+			<div class="quality-lists">
+				<div class="quality-list-block">
+					<h3>Метрики</h3>
+					<ul class="quality-list">
+						<li>SW — Silhouette Width</li>
+						<li>CH — Calinski–Harabasz</li>
+						<li>S_Dbw</li>
+						<li>AVI</li>
+						<li>AVU</li>
+						<li>MQ</li>
+					</ul>
+				</div>
+				<div class="quality-list-block">
+					<h3>Методы построения рёбер</h3>
+					<ul class="quality-list">
+						<li>adaptive_rbf</li>
+						<li>cosine</li>
+						<li>mutual_knn</li>
+						<li>tanimoto</li>
+					</ul>
+				</div>
+			</div>
+			<div class="quality-main-grid">
+				<div class="quality-left-column">
+					<div>
+						<h3 class="quality-table-title">Сравнение вариантов</h3>
+						<div class="quality-table-subtitle">Четыре метода × три значения resolution.</div>
+						<div class="quality-table-wrap">
+							<table class="quality-table">
+								<thead>
+									<tr>
+										<th>method</th>
+										<th>resolution</th>
+										<th>k</th>
+										<th>SW</th>
+										<th>CH</th>
+										<th>S_Dbw</th>
+										<th>AVI</th>
+										<th>AVU</th>
+										<th>MQ</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th>adaptive_rbf</th>
+										<td>0.9</td>
+										<td>6.50</td>
+										<td>0.1408</td>
+										<td>0.1606</td>
+										<td>1.8099</td>
+										<td>0.6322</td>
+										<td>0.4933</td>
+										<td>0.1340</td>
+									</tr>
+									<tr>
+										<th>adaptive_rbf</th>
+										<td>1.0</td>
+										<td>5.50</td>
+										<td>0.1323</td>
+										<td>0.1623</td>
+										<td>2.0307</td>
+										<td>0.6307</td>
+										<td>0.5244</td>
+										<td>0.0824</td>
+									</tr>
+									<tr>
+										<th>adaptive_rbf</th>
+										<td>1.1</td>
+										<td>6.75</td>
+										<td>0.1118</td>
+										<td>0.1467</td>
+										<td>1.9867</td>
+										<td>0.5799</td>
+										<td>0.5061</td>
+										<td>0.0943</td>
+									</tr>
+									<tr>
+										<th>cosine</th>
+										<td>0.9</td>
+										<td>4.92</td>
+										<td class="rank-cell-top1">0.1537</td>
+										<td>0.1641</td>
+										<td>2.0526</td>
+										<td>0.6637</td>
+										<td>0.5765</td>
+										<td>0.3000</td>
+									</tr>
+									<tr>
+										<th>cosine</th>
+										<td>1.0</td>
+										<td>4.25</td>
+										<td>0.1485</td>
+										<td class="rank-cell-top1">0.1682</td>
+										<td>2.1402</td>
+										<td class="rank-cell-top1">0.7072</td>
+										<td>0.6169</td>
+										<td>0.2801</td>
+									</tr>
+									<tr>
+										<th>cosine</th>
+										<td>1.1</td>
+										<td>4.71</td>
+										<td class="rank-cell-top3">0.1469</td>
+										<td class="rank-cell-top3">0.1674</td>
+										<td>2.1602</td>
+										<td class="rank-cell-top2">0.6850</td>
+										<td>0.6097</td>
+										<td>0.2918</td>
+									</tr>
+									<tr>
+										<th>mutual_knn</th>
+										<td>0.9</td>
+										<td>4.75</td>
+										<td class="rank-cell-top3">0.1477</td>
+										<td>0.1651</td>
+										<td>2.0158</td>
+										<td>0.6569</td>
+										<td>0.5446</td>
+										<td>0.2339</td>
+									</tr>
+									<tr>
+										<th>mutual_knn</th>
+										<td>1.0</td>
+										<td>4.29</td>
+										<td>0.1348</td>
+										<td class="rank-cell-top2">0.1675</td>
+										<td>2.1716</td>
+										<td class="rank-cell-top3">0.6734</td>
+										<td>0.5907</td>
+										<td>0.2120</td>
+									</tr>
+									<tr>
+										<th>mutual_knn</th>
+										<td>1.1</td>
+										<td>4.79</td>
+										<td>0.1225</td>
+										<td>0.1585</td>
+										<td>2.1405</td>
+										<td>0.6433</td>
+										<td>0.5755</td>
+										<td>0.2174</td>
+									</tr>
+									<tr>
+										<th>tanimoto</th>
+										<td>0.9</td>
+										<td>8.83</td>
+										<td class="rank-cell-top2">0.1516</td>
+										<td>0.0905</td>
+										<td class="rank-cell-top1">0.8914</td>
+										<td>0.6304</td>
+										<td class="rank-cell-top2">0.2576</td>
+										<td class="rank-cell-top1">0.3804</td>
+									</tr>
+									<tr>
+										<th>tanimoto</th>
+										<td>1.0</td>
+										<td>7.96</td>
+										<td>0.1415</td>
+										<td>0.0958</td>
+										<td class="rank-cell-top2">0.9234</td>
+										<td>0.6515</td>
+										<td class="rank-cell-top3">0.2741</td>
+										<td class="rank-cell-top2">0.3590</td>
+									</tr>
+									<tr>
+										<th>tanimoto</th>
+										<td>1.1</td>
+										<td>9.38</td>
+										<td>0.0201</td>
+										<td>0.0819</td>
+										<td class="rank-cell-top3">1.0023</td>
+										<td>0.5065</td>
+										<td class="rank-cell-top1">0.2521</td>
+										<td class="rank-cell-top3">0.3366</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="metric-legend">
+							<span><i class="legend-box legend-top1"></i> 1 место</span>
+							<span><i class="legend-box legend-top2"></i> 2 место</span>
+							<span><i class="legend-box legend-top3"></i> 3 место</span>
+						</div>
+					</div>
+					<div class="final-explanation">
+						<h3>Обоснование выбранной конфигурации</h3>
+						<p>Для выбора лучшего метода кластеризации был использован взвешенный <b>Borda Score</b>, так как часть метрик сильно коррелирует между собой по Спирмену, и без учёта весов это искажает итоговый рейтинг.<br> Метод <b>tanimoto</b> мы исключили, потому что он даёт слишком много кластеров (8–10), и из-за этого результат трудно интерпретировать. Из оставшихся методов лучший результат показал <b>cosine</b> при <b>resolution</b> = 0.9</p>
+					</div>
+				</div>
+				 
+				<div class="quality-right-column">
+					<div class="formula-card">
+						<div class="formula">Borda<span class="formula-green">Score</span> = <span class="formula-green">Σ</span> <span class="formula-green">wᵢ</span> × <span class="formula-green">Bᵢ</span></div>
+						<div class="formula-note"><b>Bᵢ</b> — балл за ранг по i-й метрике; <b>wᵢ</b> — вес метрики. Веса рассчитаны методом CRITIC с учётом различающей способности и корреляции критериев.</div>
+						<div class="weight-list">
+							<div class="weight-item"><span class="weight-name">AVU</span><span class="weight-value">0.259</span></div>
+							<div class="weight-item"><span class="weight-name">S_Dbw</span><span class="weight-value">0.214</span></div>
+							<div class="weight-item"><span class="weight-name">MQ</span><span class="weight-value">0.153</span></div>
+							<div class="weight-item"><span class="weight-name">CH</span><span class="weight-value">0.129</span></div>
+							<div class="weight-item"><span class="weight-name">AVI</span><span class="weight-value">0.128</span></div>
+							<div class="weight-item"><span class="weight-name">SW</span><span class="weight-value">0.117</span></div>
+						</div>
+					</div>
+
+					<div class="final-ranking">
+						<h3 class="quality-table-title">Итоговый рейтинг вариантов</h3>
+						<div class="quality-table-subtitle">Чем выше Borda Score, тем выше итоговая позиция после учёта весов критериев.</div>
+						<div class="quality-table-wrap">
+							<table class="quality-table">
+								<thead>
+									<tr><th>#</th><th>method</th><th>resolution</th><th>Borda Score</th></tr>
+								</thead>
+								<tbody>
+									<tr class="quality-top1"><th>1</th><td>cosine</td><td>0.9</td><td>5.079065</td></tr>
+									<tr class="quality-top2"><th>2</th><td>adaptive_rbf</td><td>0.9</td><td>5.068545</td></tr>
+									<tr class="quality-top3"><th>3</th><td>mutual_knn</td><td>0.9</td><td>4.956219</td></tr>
+									<tr><th>4</th><td>cosine</td><td>1.1</td><td>4.164959</td></tr>
+									<tr><th>5</th><td>cosine</td><td>1.0</td><td>4.106639</td></tr>
+									<tr><th>6</th><td>adaptive_rbf</td><td>1.1</td><td>3.460979</td></tr>
+									<tr><th>7</th><td>adaptive_rbf</td><td>1.0</td><td>3.370495</td></tr>
+									<tr><th>8</th><td>mutual_knn</td><td>1.1</td><td>2.920734</td></tr>
+									<tr><th>9</th><td>mutual_knn</td><td>1.0</td><td>2.872365</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+	</section>
+
+	<!-- Экономическая интерпретация, выводы, ограничения, источники (оставлены как есть) -->
+	<section id="interpret" class="section section-accent">
+		<div class="container">
+			<h2 class="section-title">Экономическая интерпретация</h2>
+			<div class="interpret-grid">
+				<div class="interpret-card"><div class="metric-value">—</div><div class="metric-label">Показатель 1</div></div>
+				<div class="interpret-card"><div class="metric-value">—</div><div class="metric-label">Показатель 2</div></div>
+				<div class="interpret-card"><div class="metric-value">—</div><div class="metric-label">Показатель 3</div></div>
+			</div>
+			<p class="interpret-text">Текст экономической интерпретации результатов.</p>
+		</div>
+	</section>
+	<section id="conclusions" class="section">
+		<div class="container">
+			<h2 class="section-title">Выводы</h2>
+			<div class="conclusions-list">
+				<div class="conclusion-item"><span class="conclusion-num">1</span><p>Вывод первый.</p></div>
+				<div class="conclusion-item"><span class="conclusion-num">2</span><p>Вывод второй.</p></div>
+				<div class="conclusion-item"><span class="conclusion-num">3</span><p>Вывод третий.</p></div>
+			</div>
+		</div>
+	</section>
+	<section id="limits" class="section section-soft">
+		<div class="container">
+			<h2 class="section-title">Ограничения</h2>
+			<ul class="limits-list">
+				<li>Ограничение 1</li>
+				<li>Ограничение 2</li>
+				<li>Ограничение 3</li>
+			</ul>
+		</div>
+	</section>
+	<section id="sources" class="section section-dark">
+		<div class="container">
+			<h2 class="section-title">Источники и контакты</h2>
+			<div class="two-col">
+				<div><h3 class="sub-title">Источники данных</h3><ul class="sources-list"><li>Источник 1</li><li>Источник 2</li></ul></div>
+				<div><h3 class="sub-title">Контакты</h3><ul class="contacts-list"><li>Автор</li><li>email@example.com</li><li>Telegram</li></ul></div>
+			</div>
+			<div class="footer-note">Кластеризация образований, 2026</div>
+		</div>
+	</section>
+
+	<script>
+		const sections = document.querySelectorAll('.section'), dots = document.querySelectorAll('.side-nav .dot');
+		const navObserver = new IntersectionObserver(entries => entries.forEach(e => {
+		if (e.isIntersecting) {
+		const id = e.target.id;
+		dots.forEach(d => d.classList.toggle('active', d.getAttribute('href') === '#' + id))
+		}
+		}), { threshold: .4 });
+		sections.forEach(s => navObserver.observe(s));
+		const revealObserver = new IntersectionObserver(entries => entries.forEach(e => {
+		if (e.isIntersecting) e.target.classList.add('visible')
+		}), { threshold: .15 });
+		sections.forEach(s => revealObserver.observe(s));
+
+		const chartData = {
+		labels: ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+		datasets: [
+		{ label:'Ряд 1', data:[10,14,18,22,28,24,32,40,48,55,62], borderColor:'#a3e635', backgroundColor:'rgba(163,230,53,.15)', fill:true, tension:.35, pointRadius:0, pointHoverRadius:5, borderWidth:2.5 },
+		{ label:'Ряд 2', data:[8,10,12,15,20,18,24,28,34,38,44], borderColor:'#6b8f1f', backgroundColor:'rgba(107,143,31,.05)', fill:false, tension:.35, pointRadius:0, pointHoverRadius:5, borderWidth:2, borderDash:[6,4] }
+		]
+		};
+		const ctx = document.getElementById('mainChart').getContext('2d');
+		const mainChart = new Chart(ctx, {
+		type:'line', data:chartData,
+		options:{
+		responsive:true, maintainAspectRatio:false,
+		animation:{duration:600},
+		interaction:{mode:'index',intersect:false},
+		plugins:{
+		legend:{labels:{color:'#e8f0e5',font:{family:'Inter',size:11},boxWidth:10,boxHeight:10,usePointStyle:true}},
+		tooltip:{backgroundColor:'#fff',borderColor:'#a3e635',borderWidth:1,titleColor:'#0f2419',bodyColor:'#1a1a1a',padding:9,cornerRadius:8,titleFont:{family:'Inter',size:11},bodyFont:{family:'Inter',size:11}}
+		},
+		scales:{
+		x:{grid:{color:'rgba(255,255,255,.08)'},ticks:{color:'#9db3a3',font:{family:'Inter',size:10}}},
+		y:{grid:{color:'rgba(255,255,255,.08)'},ticks:{color:'#9db3a3',font:{family:'Inter',size:10}}}
+		}
+		}
+		});
+
+		const slider = document.getElementById('timeSlider'),
+		yearCurrent = document.getElementById('yearCurrent'),
+		yearStart = document.getElementById('yearStart'),
+		yearEnd = document.getElementById('yearEnd'),
+		allLabels = chartData.labels;
+		slider.min = 0; slider.max = allLabels.length - 1; slider.value = allLabels.length - 1;
+		yearStart.textContent = allLabels[0]; yearEnd.textContent = allLabels.at(-1); yearCurrent.textContent = allLabels.at(-1);
+		function updateChartBySlider(index) {
+		mainChart.data.labels = allLabels.slice(0, index + 1);
+		mainChart.data.datasets.forEach((d, i) => d.data = chartData.datasets[i].data.slice(0, index + 1));
+		mainChart.update();
+		yearCurrent.textContent = allLabels[index];
+		}
+		slider.addEventListener('input', e => updateChartBySlider(+e.target.value));
+
+		dots.forEach(dot => dot.addEventListener('click', e => {
+		e.preventDefault();
+		const target = document.querySelector(dot.getAttribute('href'));
+		if (target) target.scrollIntoView({ behavior: 'smooth' });
+		}));
+	</script>
+</body>
+</html>

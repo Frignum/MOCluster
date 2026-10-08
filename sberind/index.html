@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 	<meta charset="UTF-8">
@@ -280,6 +280,7 @@
 					color: var(--text-soft);
 					border-bottom-color: rgba(47, 93, 58, .4);
 				}
+
 		.info-label {
 			font-size: 11px;
 			color: var(--text-muted);
@@ -506,6 +507,78 @@
 			.chart-item-narrow iframe {
 				height: 360px
 			}
+		}
+		.conclusion-item {
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+			padding: 24px 26px;
+			background: #fff;
+			border-radius: var(--radius);
+			border: 1px solid var(--border);
+			border-left: 3px solid var(--green-deep);
+		}
+
+		.conclusion-label {
+			display: inline-block;
+			align-self: flex-start;
+			background: #214a2f;
+			color: #fff;
+			font-size: 14px;
+			font-weight: 800;
+			letter-spacing: .08em;
+			text-transform: uppercase;
+			padding: 6px 14px;
+			border-radius: 8px;
+			line-height: 1.25;
+		}
+
+		.conclusion-text {
+			font-size: 15px;
+			line-height: 1.6;
+			color: var(--text);
+			margin: 0;
+		}
+		.chart-conclusions {
+			margin-top: 24px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.chart-conclusions-title {
+			font-size: 24px;
+			font-weight: 800;
+			color: var(--bg-dark-green);
+			margin: 0 0 4px;
+			letter-spacing: -.02em;
+		}
+
+		.chart-conclusion {
+			display: flex;
+			gap: 14px;
+			align-items: flex-start;
+			padding: 15px 18px;
+			background: #fff;
+			border: 1px solid rgba(47,93,58,.14);
+			border-left: 3px solid var(--green-deep);
+			border-radius: 12px;
+			box-shadow: 0 3px 12px rgba(47,93,58,.04);
+		}
+
+		.chart-conclusion-num {
+			flex: 0 0 24px;
+			font-size: 17px;
+			font-weight: 900;
+			color: var(--green-deep);
+			line-height: 1.4;
+		}
+
+		.chart-conclusion p {
+			margin: 0;
+			font-size: 13px;
+			line-height: 1.55;
+			color: var(--text-soft);
 		}
 
 		.chart-note {
@@ -864,6 +937,7 @@
 			line-height: 1.6;
 			color: #333;
 		}
+
 		.quality-section {
 			background: #fff
 		}
@@ -954,18 +1028,23 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
+
 				.quality-table th:nth-child(1) {
 					width: 12%;
 				}
+
 				.quality-table th:nth-child(2) {
 					width: 16%;
 				}
+
 				.quality-table th:nth-child(3) {
 					width: 12%;
 				}
+
 				.quality-table th:nth-child(4) {
 					width: 8%;
 				}
+
 				.quality-table th:nth-child(n+5) {
 					width: 8.67%;
 				}
@@ -1140,6 +1219,7 @@
 					width: 1%;
 					white-space: nowrap;
 				}
+
 			.final-ranking .quality-top1 th,
 			.final-ranking .quality-top1 td {
 				background: #c7ecc0 !important;
@@ -1189,21 +1269,24 @@
 			}
 		}
 
-		.interpret-grid {
+
+
+		.policy-grid {
 			display: grid;
-			grid-template-columns: repeat(3,1fr);
-			gap: 12px;
-			margin-bottom: 25px
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+			align-items: start;
+			margin-bottom: 24px;
 		}
 
-		.interpret-card {
+		.policy-card {
+			background: #fff;
 			border: 1px solid var(--border);
 			border-radius: var(--radius);
-			padding: 20px 22px 22px;
-			background: #fff;
+			padding: 24px 26px;
 		}
 
-		.interpret-heading {
+		.policy-heading {
 			display: inline-block;
 			background: #214a2f;
 			color: #fff;
@@ -1211,65 +1294,68 @@
 			font-weight: 800;
 			letter-spacing: .03em;
 			text-transform: uppercase;
-			padding: 6px 12px;
+			padding: 6px 14px;
 			border-radius: 8px;
-			margin: 0 0 12px;
+			margin: 0 0 16px;
 			line-height: 1.25;
 		}
 
-		.interpret-text {
-			font-size: 14px;
-			line-height: 1.65;
-			color: var(--text-soft);
-			max-width: none;
-		}
-
-		.conclusions-list {
-			display: flex;
-			flex-direction: column;
-			gap: 8px
-		}
-
-		.conclusion-item {
-			display: flex;
-			gap: 15px;
-			align-items: flex-start;
-			padding: 16px 19px;
-			background: #fff;
-			border-radius: var(--radius);
-			border: 1px solid var(--border);
-			border-left: 3px solid var(--green-deep)
-		}
-
-		.conclusion-num {
-			font-size: 18px;
-			font-weight: 900;
-			color: var(--green-deep);
-			line-height: 1;
-			flex-shrink: 0
-		}
-
-		.conclusion-item p {
+		.policy-text {
 			font-size: 13px;
-			line-height: 1.48;
-			color: var(--text-soft)
+			line-height: 1.55;
+			color: var(--text-soft);
+			margin: 0 0 14px;
 		}
 
 		.policy-list {
 			list-style: none;
-			display: grid;
-			grid-template-columns: repeat(3,1fr);
-			gap: 10px
+			padding: 0;
+			margin: 0;
 		}
 
 			.policy-list li {
-				padding: 17px 19px;
-				background: var(--bg-soft);
-				border-radius: var(--radius-sm);
+				position: relative;
+				padding: 10px 0 10px 20px;
+				border-top: 1px solid var(--border);
 				font-size: 13px;
+				line-height: 1.55;
 				color: var(--text-soft);
-				border: 1px solid var(--border)
 			}
+
+				.policy-list li:last-child {
+					border-bottom: 1px solid var(--border);
+				}
+
+				.policy-list li::before {
+					content: "";
+					position: absolute;
+					left: 0;
+					top: 17px;
+					width: 7px;
+					height: 7px;
+					border-radius: 50%;
+					background: var(--green-deep);
+				}
+
+			.policy-list b {
+				color: #18331f;
+				font-weight: 700;
+			}
+
+		.policy-note {
+			font-size: 12px;
+			line-height: 1.55;
+			color: var(--text-muted);
+			margin: 0;
+			padding-top: 8px;
+			border-top: 1px solid var(--border);
+		}
+
+		@media (max-width: 900px) {
+			.policy-grid {
+				grid-template-columns: 1fr;
+			}
+		}
 
 		.sub-title {
 			font-size: 15px;
@@ -1403,8 +1489,6 @@
 		<a href="#quality" class="dot" data-label="Оценка качества"></a>
 		<a href="#chart" class="dot" data-label="График"></a>
 		<a href="#clusters" class="dot" data-label="Кластеры"></a>
-		<a href="#interpret" class="dot" data-label="Интерпретация"></a>
-		<a href="#conclusions" class="dot" data-label="Выводы"></a>
 		<a href="#policy" class="dot" data-label="Прикладное значение"></a>
 		<a href="#sources" class="dot" data-label="Источники"></a>
 	</nav>
@@ -1430,8 +1514,6 @@
 					<li><a href="#quality">Выбор метода и качество кластеризации</a></li>
 					<li><a href="#chart">Динамическая структура кластеров</a></li>
 					<li><a href="#clusters">Кластеры и карта</a></li>
-					<li><a href="#interpret">Экономическая интерпретация</a></li>
-					<li><a href="#conclusions">Выводы</a></li>
 					<li><a href="#policy">Прикладное значение</a></li>
 				</ol>
 			</nav>
@@ -1715,12 +1797,51 @@
 					<iframe src="wage_scatter_cluster.html" loading="lazy" title="Связь зарплат и кластеров"></iframe>
 					<figcaption>Связь средней зарплаты и остальных переменных в разных кластерах</figcaption>
 				</figure>
-			</div>
+				<div class="chart-note">
+					<p>
+						График показывает, как разные кластеры муниципальных образований
+						ведут себя в зависимости от средней зарплаты.
+					</p>
+				</div>
+				<div id="conclusions" class="chart-conclusions">
+					<h3 class="chart-conclusions-title">Интерпретация</h3>
 
-			<div class="chart-note">
+
+					<div class="chart-conclusion">
+						<div class="chart-conclusion-num">1</div>
+						<p>
+							Из графика зависимости доли расходов на продовольствие от средней зарплаты видно, что в целом с ростом зарплаты доля расходов на продукты питания снижается. Это соответствует закону Энгеля: чем выше доходы, тем меньшую часть бюджета люди обычно тратят на базовые продукты питания.
+						</p>
+					</div>
+					<div class="chart-conclusion">
+						<div class="chart-conclusion-num">2</div>
+						<p>
+							Аналогичная, но обратная зависимость наблюдается для расходов на общественное питание: с ростом средней зарплаты их доля в структуре потребления увеличивается.
+						</p>
+					</div>
+
+					<div class="chart-conclusion">
+						<div class="chart-conclusion-num">3</div>
+						<p>
+							Однако из этих графиков видно, что МО с высокими зарплатами могут существенно различаться по структуре потребления. В частности, кластер 4 отличается высокими доходами, но структура расходов схожа с другими кластерами.
+						</p>
+					</div>
+					<div class="chart-headline">
+						<p>
+							Вывод: зарплату нельзя рассматривать как единственный показатель благополучия.
+						</p>
+					</div>
+					<div class="chart-conclusion">
+						<div class="chart-conclusion-num">4</div>
+						<p>
+							Доля занятых в отрасли не всегда характеризует уровень её развития. Из графика зависимости доли занятых в сфере услуг от средней зарплаты видно, что схожая доля занятых в этой отрасли наблюдается в МО с разным уровнем доходов. Следовательно, высокая доля услуг сама по себе не свидетельствует о высоком уровне экономического развития, хотя и является признаком экономики постиндустриального типа.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="chart-headline">
 				<p>
-					График показывает, как разные кластеры муниципальных образований
-					ведут себя в зависимости от средней зарплаты.
+					<br />Для того, чтобы составить экономическое описание каждого кластера, мы построили их профили за 2023 и 2024 годы и показали данные 5 кластеров на карте России
 				</p>
 			</div>
 		</div>
@@ -1796,11 +1917,11 @@
 						<div class="cluster-num">Кластер 0</div>
 						<h3>Крупные сервисно-промышленные МО</h3>
 						<p>Это крупные по численности и урбанизированные территории с высокой долей услуг и заметной промышленной составляющей. Это достаточно развитые индустриальные регионы со сравнительно высокими зарплатами. Доля продовольствия в потреблении здесь самая низкая среди всех кластеров, а доля общественного питания — самая высокая. Это говорит о более высоком уровне жизни по сравнению с другими кластерами. О развитости также свидетельствует самая большая доля расходов на транспорт.</p>
-						<div class="cluster-representatives"><strong>Характерные представители:</strong> большую часть из них составляют МО в области крупных городов: Московская, Ленинградская, Казанская, Красноярская, Иркутская и другие области.</div>
+						<div class="cluster-representatives"><strong>Характерные представители:</strong> большую часть из них составляют МО в области крупных городов: Московская, Ленинградская, Татарстан, Красноярская, Иркутская и другие области.</div>
 						<div class="cluster-examples">
 							<figure class="cluster-example"><img src="мособл.png" alt="Московская область"><figcaption>Московская область</figcaption></figure>
 							<figure class="cluster-example"><img src="ленобл.png" alt="Ленинградская область"><figcaption>Ленинградская область</figcaption></figure>
-							<figure class="cluster-example"><img src="казобл.png" alt="Казанская область"><figcaption>Казанская область</figcaption></figure>
+							<figure class="cluster-example"><img src="татарстан.png" alt="Татарстан"><figcaption>Татарстан</figcaption></figure>
 						</div>
 					</div>
 
@@ -1836,60 +1957,79 @@
 		</div>
 	</section>
 
-	<!-- INTERPRET: мягкий серый -->
-	<section id="interpret" class="section section-soft">
-		<div class="container">
-			<h2 class="section-title">Экономическая интерпретация</h2>
 
-			<div class="interpret-grid">
-				<div class="interpret-card">
-					<h3 class="interpret-heading">Закон Энгеля</h3>
-					<p class="interpret-text">
-						Один из результатов кластеризации — обратная зависимость между уровнем жизни и долей расходов на продовольствие. В самых урбанизированных и высокодоходных кластерах доля продовольствия в потребительских расходах минимальна (около 0.38–0.44), тогда как в аграрных и менее урбанизированных МО она достигает 0.45–0.50. Одновременно растёт доля расходов на общественное питание и транспорт. Это проявление закона Энгеля: по мере роста дохода снижается доля расходов на товары первой необходимости, в частности продовольствие, и всё большая часть расходов уходит на услуги, мобильность и качество жизни. Таким образом, доли расходов на разные категории товаров можно использовать в качестве одного из критериев уровня жизни.
-					</p>
-				</div>
-
-				<div class="interpret-card">
-					<h3 class="interpret-heading">Уровень жизни ≠ уровень зарплат</h3>
-					<p class="interpret-text">
-						Высокая средняя зарплата не означает автоматически высокого уровня жизни. Высокие зарплаты в северо-восточных регионах во многом объясняются стоимостью жизни, суровым климатом и вахтовым характером занятости: значительная часть дохода уходит на компенсацию издержек, а не на потребление. При этом ряд центральных и южных регионов с более низкими номинальными зарплатами демонстрируют более высокий уровень жизни: ниже доля продовольствия, выше доля услуг и общественного питания. Поэтому при интерпретации кластеров мы опираемся не только на зарплату, но и на структуру потребления и населения.
-					</p>
-				</div>
-
-				<div class="interpret-card">
-					<h3 class="interpret-heading">Доля отрасли ≠ её развитие</h3>
-					<p class="interpret-text">
-						Например, высокая доля сферы услуг в кластере может означать две разные ситуации. В первом случае это может быть признаком развитой пост-индустриальной экономики: крупный город, высокая урбанизация, разнообразный сервисный сектор — как в кластере крупных сервисно-промышленных МО. Но также это может быть показателем слаборазвитой экономики: промышленность и сельское хозяйство не развиты, из-за чего доля сферы услуг становится выше — как в большинстве небольших сервисных МО. Оба эти кластера имеют показатель занятых в сфере услуг ~0.7, но очень отличаются по уровню жизни. Поэтому мы анализируем кластеры только в сочетании с другими факторами.
-					</p>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- CONCLUSIONS: белый -->
-	<section id="conclusions" class="section">
-		<div class="container">
-			<h2 class="section-title">Выводы</h2>
-			<div class="conclusions-list">
-				<div class="conclusion-item"><span class="conclusion-num">1</span><p>Муниципальные образования делятся на 5 стабильных кластеров.</p></div>
-				<div class="conclusion-item"><span class="conclusion-num">2</span><p>Вывод второй.</p></div>
-				<div class="conclusion-item"><span class="conclusion-num">3</span><p>Вывод третий.</p></div>
-			</div>
-		</div>
-	</section>
 
 	<!-- Policy: мягкий серый -->
 	<section id="policy" class="section section-soft">
 		<div class="container">
 			<h2 class="section-title">Прикладное значение</h2>
-			<ul class="policy-list">
-				<li>1</li>
-				<li>2</li>
-				<li>3</li>
-			</ul>
+
+			<div class="policy-grid">
+
+				<!-- Сбер -->
+				<div class="policy-card">
+					<h3 class="policy-heading">Для Сбера</h3>
+
+					<p class="policy-text">
+						Кластеры дают дополнительную информацию об экономическом поведении клиентов в разных МО. Это позволяет:
+					</p>
+
+					<ul class="policy-list">
+						<li>
+							<b>Оценить структуру потребителей и объём потенциальной аудитории.</b>
+							Для каждого кластера видно, сколько там МО, какое население, какие доходы и как устроены расходы. Это позволяет оценить, сколько потенциальных клиентов в каждом сегменте и какого рода продукты им лучше подойдут.
+						</li>
+						<li>
+							<b>Создавать таргетированные рекомендации банковских продуктов.</b>
+							В более обеспеченных МО можно делать акцент на программах долгосрочных инвестиций, накопительных счетах, премиальных картах. В регионах с более низким уровнем жизни — наоборот, могут быть востребованы вклады до востребования, кредитные карты, рассрочка, микрозаймы.
+						</li>
+						<li>
+							<b>Понять интересы и подобрать методы работы.</b>
+							Профиль кластера показывает, на что люди тратят деньги — продовольствие, транспорт, общепит, маркетплейсы, здоровье. Это может быть полезно, для подбора каналов коммуникации: мобильное приложение и онлайн-продукты, или физические отделения и работа с локальным сообществом.
+						</li>
+						<li>
+							<b>Переносить опыт между МО одного кластера.</b>
+							Если в одном МО кластера хорошо сработала определённая практика (продукт, кампания, формат обслуживания), её можно пробовать в других МО того же кластера, т.к. с большой вероятностью структура клиентов там похожая, результаты ожидаемо будут близкими.
+						</li>
+					</ul>
+				</div>
+
+				<!-- Государство -->
+				<div class="policy-card">
+					<h3 class="policy-heading">Для государства</h3>
+
+					<p class="policy-text">
+						Кластеры дают основу для сравнения регионов и адресной поддержки:
+					</p>
+
+					<ul class="policy-list">
+						<li>
+							<b>Выявлять отстающие регионы внутри кластера.</b>
+							Сравнивая конкретный регион со средними значениями по его кластеру, можно увидеть, где показатели заметно ниже. Такие регионы могут стать приоритетными для субсидрованияи, инфраструктурных программм и экономической или социальной поддержки отдельных граждан.
+						</li>
+						<li>
+							<b>Переносить программы между похожими регионами.</b>
+							Если в одном регионе кластера уже работает программа поддержки, субсидий или субвенций и показывает результат, то схожего результата можно ожидать от МО этого же кластера. Такую программу можно пробовать в других регионах с возможностью заранее оценить эффект. Это снижает риски и издержки на выбор и реализацию.
+						</li>
+
+					</ul>
+				</div>
+
+			</div>
+
+			<p class="policy-note">
+				Всё это требует более детального анализа большего числа экономических, географических, демографических и других показателей разных МО, но данные 5 кластеров могут лечь в основу такой работы.
+			</p>
 		</div>
 	</section>
-
+	<section id="conclusions" class="section">
+		<div class="container">
+			<div class="conclusion-item">
+				<div class="conclusion-label">Вывод</div>
+				<p class="conclusion-text">Муниципальные образования в России отличаются по экономической структуре: структуре расходов, занятости, урбанизации. <br />Эти признаки позволяют разделить МО на 5 кластеров, устойчивых во времени: крупные сервисно-промышленные МО, небольшие сервисные МО, аграрные и менее урбанизированные МО, промышленные МО, высокодоходные урбанизированные МО. </p>
+			</div>
+		</div>
+	</section>
 	<section id="sources" class="section section-dark">
 		<div class="container">
 			<div class="footer-note">Кластеризация образований, 2026</div>
@@ -1925,7 +2065,7 @@
 		const overlay = lock.querySelector('.map-lock-overlay');
 		overlay.addEventListener('click', e => {
 		e.stopPropagation();
-		lock.classList.add('active');   // оверлей исчезнет, клики уйдут в iframe
+		lock.classList.add('active');
 		});
 		});
 

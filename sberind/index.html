@@ -94,7 +94,6 @@
 					opacity: 1
 				}
 
-		/* Секции — чередование фона для контраста */
 		.section {
 			padding: 58px 0;
 			position: relative;
@@ -228,7 +227,6 @@
 			border: 1px solid rgba(47, 93, 58, .25);
 			transition: border-color .25s, background .25s;
 		}
-		/* Оглавление */
 		.toc {
 			margin-top: 32px;
 			padding: 20px 24px;
@@ -276,7 +274,6 @@
 			}
 
 				.toc-list a:hover {
-					/* цвет не меняется */
 					color: var(--text-soft);
 					border-bottom-color: rgba(47, 93, 58, .4);
 				}
@@ -324,7 +321,6 @@
 					border-bottom: 1px solid var(--border)
 				}
 
-		/* Предобработка */
 		.prep-flow {
 			display: flex;
 			flex-direction: column;
@@ -655,7 +651,6 @@
 				line-height: 1.4;
 			}
 
-		/* Карта */
 		.map-pair {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
@@ -689,7 +684,6 @@
 				background: rgba(47, 93, 58, .06);
 			}
 
-		/* когда карта активна — оверлей скрывается, клики уходят в iframe */
 		.map-lock.active .map-lock-overlay {
 			display: none;
 		}
@@ -1493,7 +1487,6 @@
 		<a href="#sources" class="dot" data-label="Источники"></a>
 	</nav>
 
-	<!-- HERO: белый -->
 	<section id="hero" class="section section-hero">
 		<div class="container">
 			<div class="hero-image"><img src="карта.jpg" alt="Карта кластеров"></div>
@@ -1520,7 +1513,7 @@
 		</div>
 	</section>
 
-	<!-- METHOD: мягкий серый -->
+
 	<section id="method" class="section section-soft">
 		<div class="container">
 			<h2 class="section-title">Данные</h2>
@@ -1553,7 +1546,7 @@
 		</div>
 	</section>
 
-	<!-- PREPROCESSING: тёмно-зелёный -->
+
 	<section id="preprocessing" class="section section-dark">
 		<div class="container">
 			<h2 class="section-title">Предварительная обработка</h2>
@@ -1611,7 +1604,6 @@
 		</div>
 	</section>
 
-	<!-- QUALITY: белый -->
 	<section id="quality" class="section quality-section">
 		<div class="container">
 			<h2 class="section-title">Выбор метода и оценка качества кластеризации</h2>
@@ -1658,7 +1650,6 @@
 									<tr><th>algorithm</th><th>method</th><th>resolution</th><th>k</th><th>SW</th><th>CH</th><th>S_Dbw</th><th>AVI</th><th>AVU</th><th>MQ</th></tr>
 								</thead>
 								<tbody>
-									<!-- Leiden -->
 									<tr><th>leiden</th><td>adaptive_rbf</td><td>0.9</td><td>5.42</td><td>0.1355</td><td>0.1676</td><td>1.9729</td><td>0.6857</td><td>0.5198</td><td>0.0841</td></tr>
 									<tr><th>leiden</th><td>adaptive_rbf</td><td>1.0</td><td>5.88</td><td>0.1211</td><td>0.1578</td><td>2.0371</td><td>0.6569</td><td>0.5252</td><td>0.0845</td></tr>
 									<tr><th>leiden</th><td>adaptive_rbf</td><td>1.1</td><td>7.00</td><td>0.1150</td><td>0.1476</td><td>2.0501</td><td>0.6155</td><td>0.5138</td><td>0.0796</td></tr>
@@ -1675,7 +1666,7 @@
 									<tr><th>leiden</th><td>tanimoto</td><td>1.0</td><td>8.08</td><td>0.1404</td><td>0.0910</td><td class="rank-cell-top3">0.9055</td><td>0.6575</td><td>0.2642</td><td class="rank-cell-top2">0.3535</td></tr>
 									<tr><th>leiden</th><td>tanimoto</td><td>1.1</td><td>10.71</td><td>-0.0679</td><td>0.0706</td><td>1.0204</td><td>0.4266</td><td class="rank-cell-top1">0.2224</td><td>0.2462</td></tr>
 
-									<!-- Louvain -->
+
 									<tr><th>louvain</th><td>adaptive_rbf</td><td>0.9</td><td>6.46</td><td>0.1317</td><td>0.1552</td><td>1.8798</td><td>0.6605</td><td>0.4947</td><td>0.1093</td></tr>
 									<tr><th>louvain</th><td>adaptive_rbf</td><td>1.0</td><td>6.12</td><td>0.1204</td><td>0.1542</td><td>2.0213</td><td>0.6476</td><td>0.5182</td><td>0.0842</td></tr>
 									<tr><th>louvain</th><td>adaptive_rbf</td><td>1.1</td><td>6.83</td><td>0.1145</td><td>0.1467</td><td>1.9580</td><td>0.6295</td><td>0.5008</td><td>0.0983</td></tr>
@@ -1757,7 +1748,6 @@
 		</div>
 	</section>
 
-	<!-- CHART: светло-зелёный -->
 	<section id="chart" class="section section-chart">
 		<div class="container">
 			<h2 class="section-title">Динамическая структура кластеров</h2>
@@ -1847,7 +1837,6 @@
 		</div>
 	</section>
 
-	<!-- CLUSTERS: белый -->
 	<section id="clusters" class="section">
 		<div class="container">
 			<h2 class="section-title">Кластеры</h2>
@@ -1959,14 +1948,13 @@
 
 
 
-	<!-- Policy: мягкий серый -->
 	<section id="policy" class="section section-soft">
 		<div class="container">
 			<h2 class="section-title">Прикладное значение</h2>
 
 			<div class="policy-grid">
 
-				<!-- Сбер -->
+
 				<div class="policy-card">
 					<h3 class="policy-heading">Для Сбера</h3>
 
@@ -1994,7 +1982,7 @@
 					</ul>
 				</div>
 
-				<!-- Государство -->
+
 				<div class="policy-card">
 					<h3 class="policy-heading">Для государства</h3>
 

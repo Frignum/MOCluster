@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 	<meta charset="UTF-8">
@@ -858,7 +858,12 @@
 			color: var(--text-muted);
 		}
 
-		/* Оценка качества */
+		.chart-caption {
+			margin: 0 0 24px;
+			font-size: 14px;
+			line-height: 1.6;
+			color: #333;
+		}
 		.quality-section {
 			background: #fff
 		}
@@ -873,7 +878,7 @@
 
 		.quality-lists {
 			display: grid;
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: repeat(3, 1fr);
 			gap: 16px;
 			margin: 0 0 24px;
 		}
@@ -906,7 +911,7 @@
 
 		.quality-main-grid {
 			display: grid;
-			grid-template-columns: minmax(0, 1fr) 300px;
+			grid-template-columns: minmax(0, 1fr) 350px;
 			gap: 18px;
 			align-items: start;
 		}
@@ -949,21 +954,20 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
-
 				.quality-table th:nth-child(1) {
-					width: 19%
+					width: 12%;
 				}
-
 				.quality-table th:nth-child(2) {
-					width: 10%
+					width: 16%;
 				}
-
 				.quality-table th:nth-child(3) {
-					width: 9%
+					width: 12%;
 				}
-
-				.quality-table th:nth-child(n+4) {
-					width: 12.4%
+				.quality-table th:nth-child(4) {
+					width: 8%;
+				}
+				.quality-table th:nth-child(n+5) {
+					width: 8.67%;
 				}
 
 			.quality-table thead th {
@@ -988,9 +992,6 @@
 				color: var(--text-soft);
 			}
 
-			.quality-table tbody tr:nth-child(even) td {
-				background: #f5f8f4
-			}
 
 			.quality-table tbody tr:hover td,
 			.quality-table tbody tr:hover th {
@@ -998,8 +999,8 @@
 			}
 
 		.rank-cell-top1 {
-			background: #d8efd4 !important;
-			color: #18331f !important;
+			background: #c7ecc0 !important;
+			color: #0f2419 !important;
 			font-weight: 800;
 		}
 
@@ -1010,9 +1011,9 @@
 		}
 
 		.rank-cell-top3 {
-			background: #f1f7eb !important;
-			color: #36553d !important;
-			font-weight: 700;
+			background: #f5f9f1 !important;
+			color: #4a5e50 !important;
+			font-weight: 600;
 		}
 
 		.metric-legend {
@@ -1115,7 +1116,7 @@
 		}
 
 			.final-ranking .quality-table-wrap {
-				width: 300px;
+				width: 350px;
 				max-width: 100%
 			}
 
@@ -1137,13 +1138,12 @@
 
 				.final-ranking .quality-table th:nth-child(2) {
 					width: 1%;
-					white-space: nowrap
+					white-space: nowrap;
 				}
-
 			.final-ranking .quality-top1 th,
 			.final-ranking .quality-top1 td {
-				background: #d8efd4 !important;
-				color: #18331f !important;
+				background: #c7ecc0 !important;
+				color: #0f2419 !important;
 				font-weight: 800;
 			}
 
@@ -1156,9 +1156,9 @@
 
 			.final-ranking .quality-top3 th,
 			.final-ranking .quality-top3 td {
-				background: #f1f7eb !important;
-				color: #36553d !important;
-				font-weight: 700;
+				background: #f5f9f1 !important;
+				color: #4a5e50 !important;
+				font-weight: 600;
 			}
 
 		.final-explanation {
@@ -1255,14 +1255,14 @@
 			color: var(--text-soft)
 		}
 
-		.limits-list {
+		.policy-list {
 			list-style: none;
 			display: grid;
 			grid-template-columns: repeat(3,1fr);
 			gap: 10px
 		}
 
-			.limits-list li {
+			.policy-list li {
 				padding: 17px 19px;
 				background: var(--bg-soft);
 				border-radius: var(--radius-sm);
@@ -1277,16 +1277,7 @@
 			margin-bottom: 11px
 		}
 
-		.sources-list, .contacts-list {
-			list-style: none
-		}
 
-			.sources-list li, .contacts-list li {
-				padding: 8px 0;
-				border-bottom: 1px solid var(--border);
-				font-size: 13px;
-				color: var(--text-soft)
-			}
 
 		.section-dark .sources-list li,
 		.section-dark .contacts-list li {
@@ -1414,7 +1405,7 @@
 		<a href="#clusters" class="dot" data-label="Кластеры"></a>
 		<a href="#interpret" class="dot" data-label="Интерпретация"></a>
 		<a href="#conclusions" class="dot" data-label="Выводы"></a>
-		<a href="#limits" class="dot" data-label="Ограничения"></a>
+		<a href="#policy" class="dot" data-label="Прикладное значение"></a>
 		<a href="#sources" class="dot" data-label="Источники"></a>
 	</nav>
 
@@ -1441,8 +1432,7 @@
 					<li><a href="#clusters">Кластеры и карта</a></li>
 					<li><a href="#interpret">Экономическая интерпретация</a></li>
 					<li><a href="#conclusions">Выводы</a></li>
-					<li><a href="#limits">Ограничения</a></li>
-					<li><a href="#sources">Источники и контакты</a></li>
+					<li><a href="#policy">Прикладное значение</a></li>
 				</ol>
 			</nav>
 		</div>
@@ -1459,8 +1449,9 @@
 
 			<ul class="method-list">
 				<li><span class="method-num">1</span><span class="method-text"><b>Сбер.Индекс</b> — потребительские безналичные расходы на уровне МО по категориям трат: здоровье, маркетплейсы, общественное питание, продовольствие, транспорт.</span></li>
-				<li><span class="method-num">2</span><span class="method-text"><b>Росстат</b> — данные о средней заработной плате и численности населения МО.</span></li>
+				<li><span class="method-num">2</span><span class="method-text"><b>Росстат</b> — данные о средней заработной плате.</span></li>
 				<li><span class="method-num">3</span><span class="method-text"><b>Росстат</b> — данные об отраслевой структуре занятости: доля занятых в различных отраслях экономики.</span></li>
+				<li><span class="method-num">4</span><span class="method-text"><b>Росстат</b> — данные о численности населения МО и уровне урбанизации.</span></li>
 			</ul>
 
 			<h3 class="sub-title" style="margin-top:32px;">Основные переменные</h3>
@@ -1542,7 +1533,7 @@
 	<section id="quality" class="section quality-section">
 		<div class="container">
 			<h2 class="section-title">Выбор метода и оценка качества кластеризации</h2>
-			<p class="quality-lead">Для выбора конфигурации сравниваются 4 метода построения рёбер и 3 значения параметра resolution. Лучший из них выбирается с помощью взвешенного Borda Score.</p>
+			<p class="quality-lead">Для выбора конфигурации сравниваются 4 метода построения рёбер 2 алгоритма кластеризации и 3 значения параметра resolution. Лучший из них выбирается с помощью взвешенного Borda Score.</p>
 
 			<div class="quality-lists">
 				<div class="quality-list-block">
@@ -1565,31 +1556,59 @@
 						<li>tanimoto</li>
 					</ul>
 				</div>
+				<div class="quality-list-block">
+					<h3>Алгоритмы кластеризации</h3>
+					<ul class="quality-list">
+						<li>Leiden</li>
+						<li>Louvain</li>
+					</ul>
+				</div>
 			</div>
 
 			<div class="quality-main-grid">
 				<div class="quality-left-column">
 					<div>
 						<h3 class="quality-table-title">Сравнение вариантов</h3>
-						<div class="quality-table-subtitle">Четыре метода × три значения resolution.</div>
+						<div class="quality-table-subtitle">Проведено сравнение всех комбинаций из 4 методов построения рёбер, 2 алгоритмов кластеризации и 3 значений resolution.</div>
 						<div class="quality-table-wrap">
 							<table class="quality-table">
 								<thead>
-									<tr><th>method</th><th>resolution</th><th>k</th><th>SW</th><th>CH</th><th>S_Dbw</th><th>AVI</th><th>AVU</th><th>MQ</th></tr>
+									<tr><th>algorithm</th><th>method</th><th>resolution</th><th>k</th><th>SW</th><th>CH</th><th>S_Dbw</th><th>AVI</th><th>AVU</th><th>MQ</th></tr>
 								</thead>
 								<tbody>
-									<tr><th>adaptive_rbf</th><td>0.9</td><td>6.50</td><td>0.1408</td><td>0.1606</td><td>1.8099</td><td>0.6322</td><td>0.4933</td><td>0.1340</td></tr>
-									<tr><th>adaptive_rbf</th><td>1.0</td><td>5.50</td><td>0.1323</td><td>0.1623</td><td>2.0307</td><td>0.6307</td><td>0.5244</td><td>0.0824</td></tr>
-									<tr><th>adaptive_rbf</th><td>1.1</td><td>6.75</td><td>0.1118</td><td>0.1467</td><td>1.9867</td><td>0.5799</td><td>0.5061</td><td>0.0943</td></tr>
-									<tr><th>cosine</th><td>0.9</td><td>4.92</td><td class="rank-cell-top1">0.1537</td><td>0.1641</td><td>2.0526</td><td>0.6637</td><td>0.5765</td><td>0.3000</td></tr>
-									<tr><th>cosine</th><td>1.0</td><td>4.25</td><td>0.1485</td><td class="rank-cell-top1">0.1682</td><td>2.1402</td><td class="rank-cell-top1">0.7072</td><td>0.6169</td><td>0.2801</td></tr>
-									<tr><th>cosine</th><td>1.1</td><td>4.71</td><td class="rank-cell-top3">0.1469</td><td class="rank-cell-top3">0.1674</td><td>2.1602</td><td class="rank-cell-top2">0.6850</td><td>0.6097</td><td>0.2918</td></tr>
-									<tr><th>mutual_knn</th><td>0.9</td><td>4.75</td><td class="rank-cell-top3">0.1477</td><td>0.1651</td><td>2.0158</td><td>0.6569</td><td>0.5446</td><td>0.2339</td></tr>
-									<tr><th>mutual_knn</th><td>1.0</td><td>4.29</td><td>0.1348</td><td class="rank-cell-top2">0.1675</td><td>2.1716</td><td class="rank-cell-top3">0.6734</td><td>0.5907</td><td>0.2120</td></tr>
-									<tr><th>mutual_knn</th><td>1.1</td><td>4.79</td><td>0.1225</td><td>0.1585</td><td>2.1405</td><td>0.6433</td><td>0.5755</td><td>0.2174</td></tr>
-									<tr><th>tanimoto</th><td>0.9</td><td>8.83</td><td class="rank-cell-top2">0.1516</td><td>0.0905</td><td class="rank-cell-top1">0.8914</td><td>0.6304</td><td class="rank-cell-top2">0.2576</td><td class="rank-cell-top1">0.3804</td></tr>
-									<tr><th>tanimoto</th><td>1.0</td><td>7.96</td><td>0.1415</td><td>0.0958</td><td class="rank-cell-top2">0.9234</td><td>0.6515</td><td class="rank-cell-top3">0.2741</td><td class="rank-cell-top2">0.3590</td></tr>
-									<tr><th>tanimoto</th><td>1.1</td><td>9.38</td><td>0.0201</td><td>0.0819</td><td class="rank-cell-top3">1.0023</td><td>0.5065</td><td class="rank-cell-top1">0.2521</td><td class="rank-cell-top3">0.3366</td></tr>
+									<!-- Leiden -->
+									<tr><th>leiden</th><td>adaptive_rbf</td><td>0.9</td><td>5.42</td><td>0.1355</td><td>0.1676</td><td>1.9729</td><td>0.6857</td><td>0.5198</td><td>0.0841</td></tr>
+									<tr><th>leiden</th><td>adaptive_rbf</td><td>1.0</td><td>5.88</td><td>0.1211</td><td>0.1578</td><td>2.0371</td><td>0.6569</td><td>0.5252</td><td>0.0845</td></tr>
+									<tr><th>leiden</th><td>adaptive_rbf</td><td>1.1</td><td>7.00</td><td>0.1150</td><td>0.1476</td><td>2.0501</td><td>0.6155</td><td>0.5138</td><td>0.0796</td></tr>
+
+									<tr><th>leiden</th><td>cosine</td><td>0.9</td><td>3.62</td><td class="rank-cell-top3">0.1493</td><td class="rank-cell-top1">0.1872</td><td>2.2128</td><td class="rank-cell-top1">0.7618</td><td>0.6371</td><td>0.2585</td></tr>
+									<tr><th>leiden</th><td>cosine</td><td>1.0</td><td>4.12</td><td>0.1491</td><td class="rank-cell-top3">0.1792</td><td>2.1980</td><td class="rank-cell-top2">0.7277</td><td>0.6405</td><td>0.2689</td></tr>
+									<tr><th>leiden</th><td>cosine</td><td>1.1</td><td>4.71</td><td>0.1429</td><td>0.1703</td><td>2.1472</td><td>0.6860</td><td>0.6186</td><td>0.2841</td></tr>
+
+									<tr><th>leiden</th><td>mutual_knn</td><td>0.9</td><td>3.67</td><td>0.1420</td><td class="rank-cell-top2">0.1852</td><td>2.2233</td><td class="rank-cell-top3">0.7240</td><td>0.6164</td><td>0.1931</td></tr>
+									<tr><th>leiden</th><td>mutual_knn</td><td>1.0</td><td>4.25</td><td>0.1371</td><td>0.1711</td><td>2.1544</td><td>0.6796</td><td>0.5905</td><td>0.2116</td></tr>
+									<tr><th>leiden</th><td>mutual_knn</td><td>1.1</td><td>4.62</td><td>0.1281</td><td>0.1656</td><td>2.1483</td><td>0.6550</td><td>0.5809</td><td>0.2182</td></tr>
+
+									<tr><th>leiden</th><td>tanimoto</td><td>0.9</td><td>7.88</td><td class="rank-cell-top2">0.1498</td><td>0.0920</td><td class="rank-cell-top1">0.8762</td><td>0.6813</td><td>0.2702</td><td>0.3471</td></tr>
+									<tr><th>leiden</th><td>tanimoto</td><td>1.0</td><td>8.08</td><td>0.1404</td><td>0.0910</td><td class="rank-cell-top3">0.9055</td><td>0.6575</td><td>0.2642</td><td class="rank-cell-top2">0.3535</td></tr>
+									<tr><th>leiden</th><td>tanimoto</td><td>1.1</td><td>10.71</td><td>-0.0679</td><td>0.0706</td><td>1.0204</td><td>0.4266</td><td class="rank-cell-top1">0.2224</td><td>0.2462</td></tr>
+
+									<!-- Louvain -->
+									<tr><th>louvain</th><td>adaptive_rbf</td><td>0.9</td><td>6.46</td><td>0.1317</td><td>0.1552</td><td>1.8798</td><td>0.6605</td><td>0.4947</td><td>0.1093</td></tr>
+									<tr><th>louvain</th><td>adaptive_rbf</td><td>1.0</td><td>6.12</td><td>0.1204</td><td>0.1542</td><td>2.0213</td><td>0.6476</td><td>0.5182</td><td>0.0842</td></tr>
+									<tr><th>louvain</th><td>adaptive_rbf</td><td>1.1</td><td>6.83</td><td>0.1145</td><td>0.1467</td><td>1.9580</td><td>0.6295</td><td>0.5008</td><td>0.0983</td></tr>
+
+									<tr><th>louvain</th><td>cosine</td><td>0.9</td><td>4.92</td><td class="rank-cell-top1">0.1544</td><td>0.1641</td><td>2.0526</td><td>0.6727</td><td>0.5854</td><td class="rank-cell-top1">0.3000</td></tr>
+									<tr><th>louvain</th><td>cosine</td><td>1.0</td><td>4.25</td><td>0.1485</td><td>0.1711</td><td>2.1574</td><td>0.7122</td><td>0.6274</td><td>0.2801</td></tr>
+									<tr><th>louvain</th><td>cosine</td><td>1.1</td><td>4.71</td><td>0.1488</td><td>0.1700</td><td>2.1638</td><td>0.6879</td><td>0.6137</td><td>0.2918</td></tr>
+
+									<tr><th>louvain</th><td>mutual_knn</td><td>0.9</td><td>4.83</td><td>0.1461</td><td>0.1632</td><td>1.9988</td><td>0.6536</td><td>0.5403</td><td>0.2446</td></tr>
+									<tr><th>louvain</th><td>mutual_knn</td><td>1.0</td><td>4.29</td><td>0.1345</td><td>0.1675</td><td>2.1677</td><td>0.6731</td><td>0.5895</td><td>0.2122</td></tr>
+									<tr><th>louvain</th><td>mutual_knn</td><td>1.1</td><td>4.79</td><td>0.1225</td><td>0.1585</td><td>2.1405</td><td>0.6335</td><td>0.5650</td><td>0.2217</td></tr>
+
+									<tr><th>louvain</th><td>tanimoto</td><td>0.9</td><td>8.83</td><td>0.1491</td><td>0.0896</td><td class="rank-cell-top2">0.8812</td><td>0.6355</td><td class="rank-cell-top3">0.2581</td><td class="rank-cell-top1">0.3687</td></tr>
+									<tr><th>louvain</th><td>tanimoto</td><td>1.0</td><td>8.12</td><td>0.1415</td><td>0.0923</td><td>0.9078</td><td>0.6541</td><td>0.2669</td><td class="rank-cell-top3">0.3524</td></tr>
+									<tr><th>louvain</th><td>tanimoto</td><td>1.1</td><td>10.08</td><td>0.0071</td><td>0.0791</td><td>1.0042</td><td>0.4737</td><td class="rank-cell-top2">0.2406</td><td>0.3226</td></tr>
 								</tbody>
 							</table>
 						</div>
@@ -1608,15 +1627,15 @@
 
 				<div class="quality-right-column">
 					<div class="formula-card">
-						<div class="formula">Borda<span class="formula-green">Score</span> = <span class="formula-green">Σ</span> <span class="formula-green">wᵢ</span> × <span class="formula-green">Bᵢ</span></div>
+						<div class="formula">Borda<span class="formula-green"> Score</span> = <span class="formula-green">Σ</span> <span class="formula-green">wᵢ</span> × <span class="formula-green">Bᵢ</span></div>
 						<div class="formula-note"><b>Bᵢ</b> — балл за ранг по i-й метрике; <b>wᵢ</b> — вес метрики. Веса рассчитаны методом CRITIC с учётом различающей способности и корреляции критериев.</div>
 						<div class="weight-list">
-							<div class="weight-item"><span class="weight-name">AVU</span><span class="weight-value">0.259</span></div>
-							<div class="weight-item"><span class="weight-name">S_Dbw</span><span class="weight-value">0.214</span></div>
-							<div class="weight-item"><span class="weight-name">MQ</span><span class="weight-value">0.153</span></div>
-							<div class="weight-item"><span class="weight-name">CH</span><span class="weight-value">0.129</span></div>
-							<div class="weight-item"><span class="weight-name">AVI</span><span class="weight-value">0.128</span></div>
-							<div class="weight-item"><span class="weight-name">SW</span><span class="weight-value">0.117</span></div>
+							<div class="weight-item"><span class="weight-name">AVU</span><span class="weight-value">0.258</span></div>
+							<div class="weight-item"><span class="weight-name">S_Dbw</span><span class="weight-value">0.199</span></div>
+							<div class="weight-item"><span class="weight-name">MQ</span><span class="weight-value">0.168</span></div>
+							<div class="weight-item"><span class="weight-name">SW</span><span class="weight-value">0.131</span></div>
+							<div class="weight-item"><span class="weight-name">CH</span><span class="weight-value">0.130</span></div>
+							<div class="weight-item"><span class="weight-name">AVI</span><span class="weight-value">0.114</span></div>
 						</div>
 					</div>
 
@@ -1625,17 +1644,28 @@
 						<div class="quality-table-subtitle">Чем выше Borda Score, тем выше итоговая позиция после учёта весов критериев.</div>
 						<div class="quality-table-wrap">
 							<table class="quality-table">
-								<thead><tr><th>#</th><th>method</th><th>resolution</th><th>Borda Score</th></tr></thead>
+								<thead>
+									<tr><th>#</th><th>algorithm</th><th>method</th><th>resolution</th><th>Borda Score</th></tr>
+								</thead>
 								<tbody>
-									<tr class="quality-top1"><th>1</th><td>cosine</td><td>0.9</td><td>5.079065</td></tr>
-									<tr class="quality-top2"><th>2</th><td>adaptive_rbf</td><td>0.9</td><td>5.068545</td></tr>
-									<tr class="quality-top3"><th>3</th><td>mutual_knn</td><td>0.9</td><td>4.956219</td></tr>
-									<tr><th>4</th><td>cosine</td><td>1.1</td><td>4.164959</td></tr>
-									<tr><th>5</th><td>cosine</td><td>1.0</td><td>4.106639</td></tr>
-									<tr><th>6</th><td>adaptive_rbf</td><td>1.1</td><td>3.460979</td></tr>
-									<tr><th>7</th><td>adaptive_rbf</td><td>1.0</td><td>3.370495</td></tr>
-									<tr><th>8</th><td>mutual_knn</td><td>1.1</td><td>2.920734</td></tr>
-									<tr><th>9</th><td>mutual_knn</td><td>1.0</td><td>2.872365</td></tr>
+									<tr class="quality-top1"><th>1</th><td>louvain</td><td>cosine</td><td>0.9</td><td>10.963570</td></tr>
+									<tr class="quality-top2"><th>2</th><td>louvain</td><td>adaptive_rbf</td><td>0.9</td><td>10.584393</td></tr>
+									<tr class="quality-top3"><th>3</th><td>louvain</td><td>mutual_knn</td><td>0.9</td><td>10.282420</td></tr>
+									<tr><th>4</th><td>leiden</td><td>adaptive_rbf</td><td>0.9</td><td>10.107124</td></tr>
+									<tr><th>5</th><td>louvain</td><td>cosine</td><td>1.1</td><td>9.521770</td></tr>
+									<tr><th>6</th><td>leiden</td><td>cosine</td><td>1.1</td><td>9.254595</td></tr>
+									<tr><th>7</th><td>louvain</td><td>cosine</td><td>1.0</td><td>8.981410</td></tr>
+									<tr><th>8</th><td>leiden</td><td>cosine</td><td>0.9</td><td>8.716075</td></tr>
+									<tr><th>9</th><td>leiden</td><td>cosine</td><td>1.0</td><td>8.320641</td></tr>
+									<tr><th>10</th><td>louvain</td><td>adaptive_rbf</td><td>1.1</td><td>8.098480</td></tr>
+									<tr><th>11</th><td>leiden</td><td>mutual_knn</td><td>1.0</td><td>7.924817</td></tr>
+									<tr><th>12</th><td>leiden</td><td>adaptive_rbf</td><td>1.0</td><td>7.584578</td></tr>
+									<tr><th>13</th><td>leiden</td><td>mutual_knn</td><td>1.1</td><td>7.491130</td></tr>
+									<tr><th>14</th><td>louvain</td><td>mutual_knn</td><td>1.1</td><td>7.453220</td></tr>
+									<tr><th>15</th><td>louvain</td><td>adaptive_rbf</td><td>1.0</td><td>7.399101</td></tr>
+									<tr><th>16</th><td>leiden</td><td>mutual_knn</td><td>0.9</td><td>7.137013</td></tr>
+									<tr><th>17</th><td>louvain</td><td>mutual_knn</td><td>1.0</td><td>6.859490</td></tr>
+									<tr><th>18</th><td>leiden</td><td>adaptive_rbf</td><td>1.1</td><td>6.320174</td></tr>
 								</tbody>
 							</table>
 						</div>
@@ -1659,25 +1689,25 @@
 
 					<div class="chart-side">
 						<p class="chart-note">
-							Новые кластеры не создавались: разбиение всех последующих месяцев было сопоставлено с уже выделенными пятью кластерами января 2023 года. Если в новом месяце кластеров оказывалось больше, каждый из них назначался одному из пяти существующих — по минимальному расстоянию до центроида. В таблице приведены средние расстояния, по которым проводилось сопоставление.
+							В первый месяц было выделено <b>5 кластеров</b>. После этого новые кластеры не создавались: разбиение всех последующих месяцев было сопоставлено с уже выделенными пятью кластерами <b>января 2023 года.</b> <br /> Если в новом месяце кластеров оказывалось больше, каждый из них назначался одному из пяти существующих — по минимальному расстоянию до центроида. <br /> Затем было рассчитано среднее расстояние между сопоставленными друг другу кластерами <b>соседних месяцев.</b> В таблице приведены средние расстояния для каждого из 5 кластеров.
 						</p>
 						<table class="chart-mini-table">
 							<thead>
 								<tr><th>Кластер</th><th>Среднее расстояние</th></tr>
 							</thead>
 							<tbody>
-								<tr><td>0</td><td>2.603289</td></tr>
-								<tr><td>1</td><td>2.586572</td></tr>
-								<tr><td>2</td><td>2.598895</td></tr>
-								<tr><td>3</td><td>2.568309</td></tr>
-								<tr><td>4</td><td>2.598895</td></tr>
+								<tr><td>0</td><td>1.856825</td></tr>
+								<tr><td>1</td><td>1.797144</td></tr>
+								<tr><td>2</td><td>1.787219</td></tr>
+								<tr><td>3</td><td>1.737076</td></tr>
+								<tr><td>4</td><td>1.787219</td></tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
 
 				<p class="chart-headline">
-					Средняя дистанция — 2.5989. Кластеры устойчивы во времени.
+					Средняя дистанция - 1.7872. Кластеры устойчивы во времени.
 				</p>
 				<div class="chart-divider"></div>
 
@@ -1685,6 +1715,13 @@
 					<iframe src="wage_scatter_cluster.html" loading="lazy" title="Связь зарплат и кластеров"></iframe>
 					<figcaption>Связь средней зарплаты и остальных переменных в разных кластерах</figcaption>
 				</figure>
+			</div>
+
+			<div class="chart-note">
+				<p>
+					График показывает, как разные кластеры муниципальных образований
+					ведут себя в зависимости от средней зарплаты.
+				</p>
 			</div>
 		</div>
 	</section>
@@ -1841,26 +1878,20 @@
 		</div>
 	</section>
 
-	<!-- LIMITS: мягкий серый -->
-	<section id="limits" class="section section-soft">
+	<!-- Policy: мягкий серый -->
+	<section id="policy" class="section section-soft">
 		<div class="container">
-			<h2 class="section-title">Ограничения</h2>
-			<ul class="limits-list">
-				<li>Ограничение 1</li>
-				<li>Ограничение 2</li>
-				<li>Ограничение 3</li>
+			<h2 class="section-title">Прикладное значение</h2>
+			<ul class="policy-list">
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
 			</ul>
 		</div>
 	</section>
 
-	<!-- SOURCES: тёмно-зелёный -->
 	<section id="sources" class="section section-dark">
 		<div class="container">
-			<h2 class="section-title">Источники и контакты</h2>
-			<div class="two-col">
-				<div><h3 class="sub-title">Источники данных</h3><ul class="sources-list"><li>Источник 1</li><li>Источник 2</li></ul></div>
-				<div><h3 class="sub-title">Контакты</h3><ul class="contacts-list"><li>Автор</li><li>email@example.com</li><li>Telegram</li></ul></div>
-			</div>
 			<div class="footer-note">Кластеризация образований, 2026</div>
 		</div>
 	</section>
